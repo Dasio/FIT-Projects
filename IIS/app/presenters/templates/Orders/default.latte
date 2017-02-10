@@ -1,0 +1,61 @@
+{block #content}
+
+{if !$user->isLoggedIn()}
+<p>
+Nie ste prihlaseny!
+</p>
+{else}
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <div class="comments">
+
+    </div>
+    <div class="container">
+        <div class="content">
+            <div class="mytitle">Objednavky</div>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>id</th>
+                    {if $user->isInRole('admin')}
+                    <th>id_zakaznik</th>
+                    {/if}
+                    <th>Cena</th>
+                    <th>Datum prijatia</th>
+                    <th>Datum zmeny</th>
+                    <th>Stav</th>
+                    <th></th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <div n:foreach="$objednavky as $objednavka">
+                    <tr>
+                        <td>{if $user->isAllowed('Orders','edit')}{$objednavka->id}
+                        {else}
+                        {$iterator->counter}
+                        {/if}</td>
+                        {if $user->isAllowed('Orders','edit')}
+                        <td>{$objednavka->id_zakaznik}</td>
+                        {/if}
+                        <td>{$objednavka->cena}</td>
+                        <td>{$objednavka->datum_prijatia}</td>
+                        <td>{$objednavka->datum_zmeny_stavu}</td>
+                        <td>{$objednavka->stav}</td>
+                        <td><a n:href="Orders:show $objednavka->id"> Detail </a></td>
+                        {if $user->isAllowed('Orders','edit')}
+                        <td><a n:href="Orders:edit $objednavka->id"> Edit </a></td>
+                        {/if}
+
+
+                    </tr>
+                </div>
+                </tbody>
+            </table>
+        </div>
+    </div>
+{/if}
+{/block}

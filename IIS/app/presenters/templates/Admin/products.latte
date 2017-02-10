@@ -1,0 +1,44 @@
+{block #content}
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <div class="comments">
+
+    </div>
+    <div class="container">
+        <div class="content">
+            <div class="mytitle">Produkty</div>
+            <a n:href="Admin:addProduct">Vytvorit produkt</a></td>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>id</th>
+                    <th>Nazev</th>
+                    <th>Popis</th>
+                    <th>Cena</th>
+                    <th>Datum</th>
+                    <th>Obrazek</th>
+                </tr>
+                </thead>
+                <tbody>
+                <div n:foreach="$products as $product">
+                    <tr>
+                        <td>{$product->id}</td>
+                        <td>{$product->nazev}</td>
+                        <td>{$product->popis}</td>
+                        <td>{$product->cena}</td>
+                        <td>{$product->pridani}</td>
+                        <td>{$product->obrazek}</td>
+
+                        <td><a n:href="editProduct $product->id">Uprav produkt</a></td>
+                        <td><a n:href="deleteProduct $product->id">Vymaz produkt</a></td>
+
+
+                    </tr>
+                </div>
+                </tbody>
+            </table>
+        </div>
+    </div>
+{/block}

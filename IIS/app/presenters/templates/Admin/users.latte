@@ -1,0 +1,30 @@
+{block content}
+<div class="content">
+        <div class="mytitle">Uzivatele</div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>id</th>
+                <th>Jmeno</th>
+                <th>Prijmeni</th>
+                <th>E-mail</th>
+                <th>Role</th>
+                <th></th>
+            </tr>
+            </thead>
+            <div n:foreach="$users as $userx">
+                <tr>
+                    <td>{$userx->id}</td>
+                    <td>{$userx->jmeno}</td>
+                    <td>{$userx->prijmeni}</td>
+                    <td>{$userx->email}</td>
+                    <td>{$userx->role}</td>
+
+                    {if $userx->role != 'admin' && $user->isAllowed('Admin','editUser')}
+                        <td><a n:href="Admin:editUser $userx->id"> Edit </a></td>
+                    {/if}
+                </tr>
+            </div>
+        </table>
+    </div>
+{/block}

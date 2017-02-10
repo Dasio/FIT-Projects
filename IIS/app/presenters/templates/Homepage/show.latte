@@ -1,0 +1,41 @@
+{block #content}
+<div class="page-container">
+<div class="col-md-1">
+    <div class="lead"></div>
+    <div class="list-group">
+        <a n:href="show 'skicak'" class="list-group-item">Skicaky</a>
+        <a n:href="show 'pastelka'" class="list-group-item">Pastelky</a>
+
+    </div>
+</div>
+    <!-- bloc-0 -->
+    <div class="bloc l-bloc " id="bloc-0">
+        <div class="container bloc-lg">
+            <div class="row">
+
+                    <div n:foreach="$flashes as $flash"
+                         class="alert alert-{$flash->type}">{$flash->message}</div>
+                    {foreach $products as $product}
+                    <div class="col-sm-4">
+                        <h3 class="mg-md">
+                            <a n:href="Product:show $product->id">{$product->nazev}</a>
+                        </h3>
+                        <img src="{$product->obrazek}" class="img-responsive"/>
+                        <div>{$product->popis}</div>
+                        </div>
+                    {/foreach}
+
+                    </div>
+
+                </div>
+
+
+        </div>
+    </div>
+    <!-- bloc-0 END -->
+</div>                </div>
+
+
+
+
+    {/block}

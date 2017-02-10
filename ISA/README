@@ -1,0 +1,15 @@
+Pri FTPServeri ukoncenie trva 5s kvoli timeoutu na recv
+Pri SSH cca 10s
+
+Odovzdané súbory:
+ISAExc.h
+Makefile
+README
+argparser.cpp
+argparser.h
+ftpserver.cpp
+ftpserver.h
+main.cpp
+manual.pdf
+sshserver.cpp
+sshserver.h

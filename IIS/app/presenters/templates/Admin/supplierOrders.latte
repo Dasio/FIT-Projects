@@ -1,0 +1,47 @@
+{block #content}
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <div class="comments">
+
+    </div>
+    <div class="container">
+        <div class="content">
+            <div class="mytitle">Objednavky na sklad</div>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>id</th>
+                    <th>Email zamestnanca</th>
+                    <th>Nazev firmy</th>
+                    <th>Nazev produktu</th>
+                    <th>Mnozstvo</th>
+                    <th>Doba</th>
+                    <th>Datum</th>
+                    <th>Stav</th>
+                </tr>
+                </thead>
+                <tbody>
+                <div n:foreach="$orders as $order">
+                    <tr>
+                        <td>{$order->id}</td>
+                        <td>{$order->email}</td>
+                        <td>{$order->firma}</td>
+                        <td>{$order->produkt}</td>
+                        <td>{$order->mnozstvo}</td>
+                        <td>{$order->doba}</td>
+                        <td>{$order->datum}</td>
+                        <td>{$order->stav}</td>
+                        {if $order->stav == 'Objednane'}
+                            <td><a n:href="acceptSupplierOrder $order->id">Potvrdit</a></td>
+                        {/if}
+
+
+                    </tr>
+                </div>
+                </tbody>
+            </table>
+        </div>
+    </div>
+{/block}

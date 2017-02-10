@@ -1,0 +1,108 @@
+{block #content}
+
+<!doctype html>
+<html>
+<head>
+
+    <title>Produkt </title>
+</head>
+<body>
+<!-- Main container -->
+<div class="page-container">
+
+    <!-- bloc-0 -->
+    <div class="bloc l-bloc " id="bloc-0">
+        <div class="container bloc-lg">
+            <div class="row">
+                <div class="col-sm-4">
+                    <h3 class="mg-md">
+                        {$product->nazev}
+                        {if $product->sklad != 0}
+                        <p> Skladem </p>
+                        {else}
+                        <p> Neni na sklade</p>
+                            {if $doba == ''}
+                                <p> Doba dodania nedostupna </p>
+                            {else}
+                            <p> Dostupne za {$doba} dni </p>
+                            {/if}
+                        {/if}
+                    </h3>
+                    <p>{$product->popis}</p>
+
+                    <div class="col-sm-2">
+                        {if $user->isAllowed('Cart','add') && $product->sklad != 0}
+                        <a n:href="Cart:add $product->id" class="btn  btn-d  btn-lg"> Pridat do kosika</a>
+                        {/if}
+                        <p>Prumerne hodnoceni: {$avg}
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="col-sm-4">
+                    <h3 class="mg-md"></h3>
+                    <img src="{$product->obrazek}" class="img-responsive"/>
+            </div>
+        </div>
+    </div>
+
+    <!-- bloc-0 END -->
+    <h4 align="center">Komentare</h4>
+    <div class="bloc l-bloc " id="bloc-0">
+        <div class="container bloc-lg">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="comments">
+
+                    </div>
+                    {if $user->isLoggedIn()}
+                        <form  id="form-1"  n:name=commentForm novalidate>
+
+                        <div class="form-group">
+                            {*<label>*}
+                                {*Message*}
+                            {*</label>*}
+						<textarea n:name="content" id="message" class="form-control" rows="4" cols="50" required>
+
+						</textarea>
+                            <div class="content-form">{input body}</div>
+                        </div>
+                        <button class="bloc-button btn btn-d btn-lg btn-block" type="submit">
+                            Publikovat
+                        </button>
+                        <h3>Recenze uzivatelu</h3>
+                    </form>
+                    {else}
+                        <a n:href="Sign:in"><h4 align="center">Komentovat muzou jenom registrovani uzivatele</h4></a>
+                    {/if}
+
+                    {foreach $comments as $comment}
+                    {*<div class="detailBox">*}
+                    <div class="titleBox">
+                        <label><b>{$users[$comment->id]->jmeno}</b></label>
+
+
+                    </div>
+                    <div class="actionBox">
+                        <ul class="commentList">
+                            <li>
+                                <div class="commentText">
+                                    <p class="">{$comment->content}</p> <span class="date sub-text"></span>
+
+                                </div>
+                            </li>
+                           </ul>
+                        {/foreach}
+                        </form>
+                    </div>
+                {*</div>*}
+
+                    {*{control commentForm}*}
+
+                </div>
+            </div>
+        </div>
+    </div>
+</html>
+

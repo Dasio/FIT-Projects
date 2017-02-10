@@ -1,0 +1,51 @@
+
+
+{block #content}
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <div class="comments">
+
+    </div>
+    <div class="container">
+        <class="content">
+
+            <h3><a n:href="Orders:generate $objednavka->id">Generovat fakturu</a></h3>
+            <h3><a n:href="Orders:generate $objednavka->id, true">Tlacit fakturu</a></h3>
+
+
+            <div class="mytitle">Objednavka</div>
+
+            <p>Stav: {$objednavka->stav}</p>
+            <p> Datum prijatia: {$objednavka->datum_prijatia}</p>
+            <p>Zmena stavu: {$objednavka->datum_zmeny_stavu}</p>
+            <p> Doprava: {$objednavka->sposob_dopravy}</p>
+            <p> Platba: {$objednavka->sposob_platby}</p>
+            <p> Poznamka: {$objednavka->poznamka}</p>
+            <div class="mytitle">Obsah</div>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>Nazev</th>
+                    <th>Mnozstvi</th>
+                    <th>Cena</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <div n:foreach="$obsah as $ob">
+                    <tr>
+                        <td><a n:href="Product:show $ob->id_produkt"><img src="{$produkty[$ob->id_produkt]->obrazek}" class="img-thumbnail" width="100" height="150"/></a></td>
+                        <td>{$produkty[$ob->id_produkt]->nazev}</td>
+                        <td>{$ob->mnozstvo}</td>
+                        <td>{$ob->cena}</td>
+
+                    </tr>
+                </div>
+                </tbody>
+            </table>
+        </div>
+    </div>
+{/block}

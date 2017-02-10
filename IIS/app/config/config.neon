@@ -1,0 +1,88 @@
+#
+# WARNING: it is CRITICAL that this file & directory are NOT accessible directly via a web browser!
+# http://nette.org/security-warning
+#
+parameters:
+
+
+php:
+	date.timezone: Europe/Prague
+
+
+application:
+	errorPresenter: Error
+	mapping:
+		*: App\*Module\Presenters\*Presenter
+
+
+session:
+	expiration: 14 days
+
+
+services:
+
+
+	authenticator: \auth\MyAuthenticator
+
+	- App\Forms\SignFormFactory
+	router: App\RouterFactory::createRouter
+
+	authorizator:
+		class: Nette\Security\Permission
+		setup:
+			- addRole('guest')
+			- addRole('registered','guest')
+			- addRole('staff','registered')
+			- addRole('admin')
+			- addResource('Homepage')
+			- addResource('Cart')
+			- addResource('Order')
+			- addResource('Orders')
+			- addResource('Post')
+			- addResource('Product')
+			- addResource('Register')
+			- addResource('Sign')
+			- addResource('Admin')
+			- addResource('Error')
+			- allow('guest','Error')
+			- allow('guest','Homepage')
+			- allow('guest','Product')
+			- allow('guest','Sign')
+			- allow('guest','Register')
+			- allow('registered','Cart')
+			- allow('registered','Order')
+			- allow('registered', 'Orders','default')
+			- allow('registered', 'Orders','show')
+			- allow('registered', 'Orders','generate')
+			- allow('staff','Orders')
+			- allow('staff','Admin')
+			- deny('staff','Admin','editUser')
+			- allow('admin') # šetky resources a ich akcie
+
+extensions:
+	cart: Dasio\ShoppingCart\DI\Extension
+	thumbnail: Kollarovic\Thumbnail\DI\Extension
+
+cart:
+	columns:
+		image: yes
+		name: yes
+		price: no
+		quantity: yes
+		totalWithoutVat: yes
+		total: yes
+		delete: yes
+	price:
+		currency: kč
+		decimals: 0
+		decimalPoint: ','
+		thousandsSep: ' '
+		priceFormat: '{price} {currency}'
+	buttons:
+		next: Objednat
+		continue: Pokracovat v nakupe
+		update: Update
+	image:
+		width: 80
+		height: 80
+

@@ -1,0 +1,53 @@
+{block content}
+
+
+{*{control orderForm}*}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 col-md-4 col-md-offset-4">
+            <h1 class="text-center login-title"></h1>
+            <div class="account-wall">
+                <form class="form-signin" n:name=orderForm>
+
+                    <p align="center">Osobni udaje</p>
+
+                    <div id="osobniUdaje">
+                        <input n:name=telefon type="text" class="form-control"  placeholder="Telefonni cislo(bez mezer)"maxlength="9">
+                        {if $form['telefon']->hasErrors()}
+                            {inputError telefon}
+                        {/if}
+                        <input n:name=mesto type="text" class="form-control" placeholder="Mesto" >
+                        {if $form['mesto']->hasErrors()}
+                            {inputError mesto}
+                        {/if}
+                        <input n:name=ulice type="text" class="form-control" placeholder="Adresa">
+                        {if $form['ulice']->hasErrors()}
+                            {inputError ulice}
+                        {/if}
+                        <input n:name=psc type="text" class="form-control" placeholder="PSC(bez mezer)" maxlength="5">
+                        {if $form['psc']->hasErrors()}
+
+                            {inputError psc}
+
+                        {/if}
+                    <div n:class="form-signin">
+                      <p>Sposob dopravy:</p>  {input sposob_dopravy}
+                    </div>
+                        <p>Sposob platby:</p>
+                        <div n:class="form-signin">
+                            {input sposob_platby}
+                        </div>
+                        Poznamky:
+                        <div n:class="form-signin">
+                            {input poznamka}
+                        </div>
+                    </div>
+                    <button class="btn btn-lg btn-primary btn-block" type="submit" n:name="login">
+                        Objednat</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,71 @@
+
+.container {
+  max-width: 900px;
+}
+
+form th {
+    text-align: left;
+}
+
+div.product {
+  border: 1px solid #fbdede;
+  padding: 10px 7px 18px 10px;
+  background-color: #FFFCFC;
+  margin-top: 6px;
+}
+div.product .price {
+  color: #C73733;
+  font-size: 14px;
+  font-weight: bold;
+}
+div.product p {
+  clear: both;
+  min-height: 100px;
+  margin: 0;
+}
+div.product .btn {
+  margin-bottom: 7px;
+}
+div.product h3 {
+  min-height: 40px;
+  margin: 0 0 9px;
+  line-height: 1.57em;
+}
+div.product h3 a {
+  text-decoration: underline;
+}
+div.product a.thumbnail {
+  margin: 0 10px 10px 0;
+}
+
+table#cart {
+  margin-bottom: 30px;
+}
+table#cart td {
+  vertical-align: middle !important;
+}
+table#cart tbody tr td.quantity input {
+  width: 5em;
+}
+table#cart tbody tr td.quantity input {
+  width: 5em;
+}
+table#cart tbody tr td.delete {
+  width: 60px;
+}
+table#cart tbody tr td.image {
+  width: 106px;
+}
+table#cart tbody tr td .thumbnail {
+  margin: 0;
+}
+table#cart tfoot tr td {
+  padding-top: 16px;
+}
+table#cart tfoot tr td.total {
+  font-size: 24px;
+  text-align: right;
+}
+table#cart tfoot tr td.total span {
+  color: #C73733;
+}

@@ -1,0 +1,48 @@
+{block #content}
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <div class="comments">
+
+    </div>
+    <div class="container">
+        <div class="content">
+            <div class="mytitle">Dodavatelia</div>
+            <a n:href="Admin:addSupplier">Pridat dodavatela</a></td>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>id</th>
+                    <th>Nazev</th>
+                    <th>WWW</th>
+                    <th>E-mail</th>
+                    <th>Telefon</th>
+                    <th>Mesto</th>
+                    <th>Ulica</th>
+                    <th>PSC</th>
+                </tr>
+                </thead>
+                <tbody>
+                <div n:foreach="$suppliers as $supplier">
+                    <tr>
+                        <td>{$supplier->id}</td>
+                        <td>{$supplier->nazev}</td>
+                        <td>{$supplier->www}</td>
+                        <td>{$supplier->email}</td>
+                        <td>{$supplier->telefon}</td>
+                        <td>{$supplier->mesto}</td>
+                        <td>{$supplier->ulica}</td>
+                        <td>{$supplier->psc}</td>
+
+                        <td><a n:href="editSupplier $supplier->id">Detaily</a></td>
+                        <td><a n:href="deleteSupplier $supplier->id">Vymaz</a></td>
+
+
+                    </tr>
+                </div>
+                </tbody>
+            </table>
+        </div>
+    </div>
+{/block}

@@ -1,0 +1,64 @@
+    <html><head>
+        <meta http-equiv="content-type" content="text/html; charset=iso-8859-2">
+        <title>Projekt IIS</title>
+        <style type="text/css">
+        	table { border-collapse: collapse; }
+        	td, th { border: 1px solid black; padding: 0.3em 0.5em; text-align: left; }
+        	dt { font-weight: bold; margin-top: 0.5em; }
+        </style>
+    <style type="text/css"></style><style type="text/css" id="stylish_s_empty"></style></head>
+    <body>
+
+    <!-- Zkontrolujte prosím nastavení kódování v hlavičce dokumentu
+         podle použitého editoru -->
+
+    <h1>Internetový obchod pastelek a skicáků</h1> <!-- Nahradte názvem svého zadání -->
+
+    <dl>
+    	<dt>Autoři</dt>
+    	<dd> Vladyslav Nimizhan<!-- Nahraďte skutečným jménem a e-mailem autora a popisem činnosti -->
+    	    <a href="mailto:xnimiz00@stud.fit.vutbr.cz">xnimiz00@stud.fit.vutbr.cz</a> -
+    		Formuláře, komentáře, výpis produktů, přihlašování.
+    	</dd>
+    	<dd>Dávid Mikuš <!-- Nahraďte skutečným jménem a e-mailem autora a popisem činnosti -->
+    	    <a href="mailto:xmikus15@stud.fit.vutbr.cz">xmikus15@stud.fit.vutbr.cz</a> -
+    		Košík, administrace, role, objednavky
+    	</dd>
+    	<dt>URL aplikace</dt>
+    	<dd><a href="http://iis.akamaid.eu">http://iis.akamaid.eu</a></dd>
+
+    </dl>
+
+    <h2>Uživatelé systému pro testování</h2>
+    <table>
+    <tbody><tr><th>Login</th><th>Heslo</th><th>Role</th></tr>
+    <tr><td>admin</td><td>123456</td><td>Administrátor</td></tr>
+    <tr><td>kliment@gmail.com</td><td>mojeheslo</td><td>Obsluha obchodu</td></tr>
+    <tr><td>kandrac@gmail.com</td><td>mojeheslo</td><td>Zákazník</td></tr>
+    </tbody></table>
+
+    <h2>Implementace</h2>
+    <p>V internetovém obchodu je 3 úrovně uživatelů. Admin  může měnit roli uživatele (AdminPresenter.php), přidávat a mazat produkty (ProductPresenter.php), a spravovat objednavky (OrdersPresenter.php). Registrováni uživatelé mají si možnost přidávat produkty do košíku, kde mění počet kusů, a vídí kolik daná objednavka bude stát, nechát komentář o produktu a ohodntit ho. V databázi je uložené informace o dodaváteli a o produktech které dodává. Obsluha obchodu může objednat tovar od dodavatele
+    a když potvrdí přichod objednavky tak se to přidá na sklad. Neregistrování uživatelé si mužou jenom prohlížet produkty daného obchodu. </p>
+    <p>Funkšnost admina je v AdminPresenter.php + šablony Admin/*.latte</p>
+    <p>Registrace uživatelů je v RegisterPresenter.php + šablona Register/register.latte</p>
+    <p>Přihlášování uživatelů je v SignPresenter.php + šablona Sign/in.latte</p>
+    <p>Autentizace uživatele v MyAuthenticator.php</p>
+    <p>Hlavní stranka je v HomepagePresenter.php + šablona Homepage/default.latte</p>
+    <p>Správa produktu je v ProductPresenter.php + šablony Product/*.latte </p>
+    <p>Objednavky jsou v OrdersPresenter.php + šablony Orders/*.latte </p>
+    <p>Role jsou uložené v config.neon</p>
+    <h2>Instalace</h2>
+    <ul>
+    <li>Databáze je uložená v souboru(db_eshop), je nutné importovat.</li>
+    <li>Projekt byl vytvořen pomocí frameworku Nette</li>
+    <li>Aplikace vyžaduje PHP5 a MySQL5</li>
+    <li>Postup instalace: Je potřeba nastavit databáze v config.local.neon. a config soubory umístěné v app/config/ pro připojení do DB. Nainstalovat composer a spustit instalaci v kořenové složce.</li>
+    </ul>
+
+    <h2>Známé problémy</h2>
+    <p>V návrhu projektu z IDS jsme měli 2 tabulky produktů:"Skicak" a "Pastelka". Obsah tabulek byl stejný a proto jsme sjednotili to do jedné tabulky "product" </p>
+
+
+
+    </body></html>

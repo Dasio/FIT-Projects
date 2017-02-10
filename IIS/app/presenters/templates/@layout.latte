@@ -1,0 +1,94 @@
+{**
+ * @param string   $basePath web base path
+ * @param array    $flashes  flash messages
+ *}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+
+    <title>{ifset title}{include title|striptags} | {/ifset} Internetovy obchod </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="{$basePath}/css/style.css">
+    <link rel="stylesheet" href="{$basePath}/css/bootstap.min.css">
+    <link rel="shortcut icon" href="{$basePath}/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+
+
+    {block head}
+    {/block}
+</head>
+
+<body>
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" n:href="Homepage:">E-Shop</a>
+        </div>
+
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+
+                {if $user->isAllowed('Orders','default')}
+                    <li class="nav navbar-nav navbar-right"><a n:href="Orders:default"> Objednavky </a></li>
+                {/if}
+
+            </ul>
+            <ul class=" nav navbar-nav navbar-right">
+                {if $user->isAllowed('Admin','show')}
+                <li class="dropdown">
+                    <a href="#" data-toggle="dropdown" class="dropdown-toggle">Administracia <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a n:href="Admin:products">Produkty</a></li>
+                        <li><a n:href="Admin:users">Uzivatelia</a></li>
+                        <li><a n:href="Admin:suppliers">Dodavatelia</a></li>
+                        <li><a n:href="Admin:supplierOrders">Objednavky na sklad </a></li>
+                    </ul>
+                </li>
+                {/if}
+                {if $user->isAllowed('Cart','default')}
+                    <li class="active"><a n:href="Cart:default">Kosik - {$cart->total|price} </a></li>
+                {/if}
+                {if $user->isLoggedIn()}
+                    <li><a n:href="Sign:out">Odhlasit</a></li>
+                {else}
+                    <li><a n:href="Sign:in">Přihlásit</a></li>
+                {/if}
+            </ul>
+
+
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container-fluid -->
+</nav>
+<script src="{$basePath}/js/bootstap.min.js"></script>
+
+
+<script> document.body.className += ' js' </script>
+
+{*<div n:foreach="$flashes as $flash" class="flash {$flash->type}">{$flash->message}</div>*}
+
+
+</div>
+{include #content}
+</body>
+</html>
