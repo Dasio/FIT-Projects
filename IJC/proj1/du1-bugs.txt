@@ -1,0 +1,62 @@
+Hodnocení IJC/2012L, DÚ1
+
+Hodnocení probíhalo procházením kódu a na základì výsledkù sady automatických testù.
+Vzhledem k tomu, ¾e DÚ na sobì hodnì stavìl, mohla nastat situace, kdy jedna
+chyba (zejména v makrech manipulujících s bitovými poli) zpùsobila totální nefunkènost
+v¹ech dal¹ích èástí, pøesto¾e tyto èásti samotné byly v zásadì v poøádku. Takové chyby
+jsem ohodnotil, opravil a testy spou¹tìl znovu. V nìkolika pøípadech se mi zdroj chyby
+nalézt nedaøilo, vìt¹inou vlivem nepøehledného kódu: pak mi nezbývalo ne¾ hodnotit
+funkènost samotnou (obvykle ve Vá¹ neprospìch: vítejte v reálném svìtì, kde Va¹e
+programy musí èíst i jiní programátoøi). Mnoho øe¹ení nebylo 32/64bit neutrální.
+Programy jsem hodnotil pøelo¾ené tak, jak fungovaly lépe (a pochopitelnì jsem strhnul
+pau¹ální body za 32/64bit nefunkènost).
+
+Nejèastìj¹í chyby v DÚ1:
+       
+Memory leaky, Resource leaky
+ - Jednodu¹e neuvolòování pamìti pocházející z malloc() a neuzavírání ukazatelù z fopen()
+
+Bì¾né pamì»ové chyby
+ - Dvojité free() na jeden ukazatel
+ - Nekontrolování, zda malloc() nevrátil NULL, popø. varianta, kdy steg-decode nekontroloval
+   co vrátilo ppm_read (které v pøípadì neúspìchu mìlo vracet NULL také)
+ - Buffer overflow
+ - ©patnì o¹etøení realloc: je tøeba alokovat do pomocného ukazatele, ten testovat na NULL a
+   pøípadnì uvolnit i pùvodní pamì»ový blok.
+
+Chybìjící include pou¾ívané funkce
+ - Pøesto¾e pøekladaè pouze varuje, jedná se o chybu, která pøekladaèi brání
+   upozoròovat na ¹patné volání funkcí.
+
+Nedefinované chování
+ - fclose(NULL)
+
+Makro nefunkèní na legitimních místech programu
+ - støedníky na konci maker (problém v if () foo(); else bar();, popø. ve výrazech)
+ - neuzavøení nìkolika pøíkazù do 'do {} while(0)' (problém v if () foo(); else bar();)
+ - pomocné promìnné s pevným jménem v makrech (znemo¾òující vícenásobné pou¾ití)
+
+Neovìøování výsledkù I/O operací
+ - fscanf, fopen, fread atd. nemusí v¾dy uspìt
+ 
+GetBit/SetBit nedìlají to co mají
+ - Test na kontrolu mezí pøipou¹tìl jako nejvy¹¹í hodnotu samotnou velikost pole (ale
+   indexuje se od nuly, tak¾e maximální platný index je velikost-1): VELMI ÈASTO
+ - ©patné poèítání indexù
+ - Závislost na 32/64bit prostøedí (velmi èasto)
+ - GetBit nebvrací 0,1, ale i nìco jiného (zadání) 
+
+Eratosthenovo síto
+ - Neprodukuje prvoèísla (èasto pouze jedna varianta z inline/makro)
+ - Prvoèísla neodpovídající zadání: ¹patné poøadí (velmi èasto), jiná horní mez
+
+ppm_read nedetekuje neplatné PPM soubory
+ - Bez kontroly, zda velikost payload odpovídá velikostem v hlavièce (velmi èasto)
+ - Bez kontroly barevné hloubky (také èasto)
+ - Èasto doprovázeno pamì»ovými chybami (v¾dy je potøeba vìdìt, jak velká jsou data
+   se kterými va¹e programy pracují!)
+
+Jména neodpovídají zadání
+ - Zdánlivì trivialita, ale dodr¾ování specifikací a domluvených rozhraní je souèást
+   programování.
+

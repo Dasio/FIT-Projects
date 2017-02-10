@@ -1,0 +1,57 @@
+v1.0
+====
+
+Funkce MyMail::pear_mail má sloužit k odesílání informačních emailů. Primárně
+je určená k odesílání informací o objednávce z eshopu. Funkce se ale používá i
+pro odesílání dotazů o produktech od zákazníka do eshopu. Funkce má 6
+parametrů, poslední z nich není pořádně vyzkoušený a ještě se nepoužívá.
+  $to       emailová adresa, komu má být poslán email,
+  $subject  řetězec předmětu zprávy,
+  $nadpis   nadpis, který se má objevit v textu emailu,
+  $body     tělo textu emailu (může být html nebo text, viz dále),
+  $html     jestli se má odeslat html nebo holý text,
+  $from     od koho se má poslat email.
+
+Důležité je nastavení smtp serveru. To je v globální proměnné $CONFIG
+(asociativní pole). Funkce vrací true, pokud se odeslání povedlo, jinak false.
+Textový výsledek operace je uložen do proměnné $ERRORMSG (to se používá pro
+logování úspěšně i neúspěšně odeslaných zpráv).
+
+v1.1
+====
+
+BUGFIX 1: Opravená chyba použití parametru $from:
+
+             $headers = array(
+                 "From" => $sender,
+                 "To" => $to,
+-                "Reply-to" => $to,
++                "Reply-to" => $from,
+                 "Content-Type" => 'text/plain; charset=utf-8',
+                 "Content-Transfer-Encoding" => 'quoted-printable',
+                 "Subject" => $subject
+
+    Funkce pear_mail se má používat nejen pro posílání objednávek, ale také pro
+    posílání dotazů od zákazníka (z webové stránky) k majiteli eshopu. Pokud
+    přijde dotaz od zákazníka, tak aby majitel eshopu v emailovém prohlížeči
+    klikl na tlačítko "Odpovědět" a automaticky se mu vyplnila hlavička To: na
+    email zákazníka. (resp. aby hlavička Reply-to byla patřičně nastavená).
+
+BUGFIX 2: Opravená chyba s $body: Tělo emailu nepoužívalo hlavičku a patičku
+    html.
+
++        $body = $html_start . $body . $html_end;
+
+    Email se sice odeslal, ale tak, jak byl. Některé emailové prohlížeče sice
+    interpretují správně html tělo, ale chybí jim hlavička a patička.
+
+FEATURE 1: Přidána děkovná zpráva na konci emailu:
+
++        if (strncmp($nadpis, "Objednávka č.") == 0)
++        {
++            $diky = "<p>Děkujeme za Vaši objednávku v našem eshopu. Objednávka byla přijata, o jejím potvrzení Vás budeme co nejdříve informovat.</p>";
++            $body = $body . $diky;
++        }
+
+    Pokud se jedná o objednávku (podle nadpisu emailu), má se ke konci emailu
+    přidat text děkovné zprávy.

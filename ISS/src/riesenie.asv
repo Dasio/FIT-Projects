@@ -1,0 +1,12 @@
+%% 1
+img = imread('xmikus15.bmp');
+H = ones(3,3) * -0.5;
+H(2,2) = 5.0;
+s1 = imfilter(img,H);
+imwrite(s1,'step1.bmp');
+
+%% 2
+s2 = fliplr(s1);
+imwrite(s2,'step2.bmp');
+
+%% 3

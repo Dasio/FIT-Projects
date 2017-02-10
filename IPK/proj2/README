@@ -1,0 +1,35 @@
+Projekt je napisany v C++ za pouzitia kniznice Boost, hlavne modulu Asio
+
+Inspirovany z http://www.boost.org/doc/libs/1_58_0/doc/html/boost_asio/examples/cpp11_examples.html HTTP Server
+    - len spravu pripojeni, parsovanie odpovede a dalsie veci som uz riesil sam.
+
+Server je asynchronny
+Pridane:
+    - Keep-Alive - nefunguje pri chunked-transfer encoding
+        - pridany aj napevno dany timeout 30s => nebere v uvahe z hlavicky keep-alive-info
+    - Chunked-Transfer Encoding
+        - pouziva sa len ked je zadany prepinac -c
+        - pri prepinaci -t, je odoslany dalsi chunk v intervale <min-chunk-time, 2x min-chunk-time>, nahodne vygenerovany
+    - Podpora nie len pre text/plain ale aj text/html, image/jpg,png.
+        - v browseri je potom pekne vidno funkcnost chunked transferu spolu s -t pri nacitani obrazku
+    - Directory-listing
+        - ak sa vyziada adresar a nenajde sa index.html tak sa vygeneruje html kod ktory obsahuje subory a zlozky v danom adresary
+        - inspirovane Apache serverom (vypis len mena suboru a bez zoradenia)
+    - Logovanie
+        - pri spusteni serveru sa ihned vytvoria 2 subory .in.log a out.log s casovym razitkom
+        - kazde pripojenie do daneho suboru zapisuje odoslane a prijmane data
+        - PROBLEM: pri chunk-transfer-encoding v .out.log, je hlavicka zapisana za datami
+
+Client:
+    - jednoduche spracovanie validneho URI - nebola pouzita ziadna externa kniznica, nevalidny vstup to nezachyti
+    - Chunked-Transfer Encoding
+        - objekt sa rekonstruuje az ked pride posledny chunk "0\r\n\r\n"
+    - Logovanie
+        - pri spusteni klienta sa ihned vytvoria 2 subory .in.log a out.log s casovym razitkom
+            - do nich su zapisovane data priamo zo socketov
+        - ked je cela odpoved precitana, tak su vytvorene subory s casovym razitkom kedy klient precital cele potrebne data
+            - .header - cela hlavicka, vratane http status code
+            - .payload - data z vyziadaneho suboru
+                        - pri Chunked-Transfer encoding sa caka na posledny chunk a potom sa to zrekonstruuje
+
+

@@ -1,0 +1,47 @@
+Hodnocení IJC/2012/L, DÚ2
+
+Ve druhém DÚ jsem se zamìøil zejména na správnost výstupu, korektní
+o¹etøení chybových stavù a vstupù, a ve druhé èásti pak zejména
+na korektní práci s pamìtí. Validace vstupu a správné o¹etøení
+potenciálních chybových stavù je zásadní souèástí programování
+v jazyce C, a tedy jsem testoval ¹irokou ¹kálu chybových vstupù:
+v takovém pøípadì nebyl dùle¾itý konkrétní výstup programu, ale to jak
+program takový vstup zvládl: zda program chybový stav detekoval,
+oznámil, ukonèil se a nenastala ¾ádná pamì»ová chyba.
+
+Nejèastìj¹í chyby v èásti a)
+----------------------------
+
+  - Zalomení na jiný poèet znakù
+  - Problémy se zpracováním parametrù: nedostateèná validace, ovìøování,
+    zda se povedlo otevøít soubor
+  - Pøidávání velkého mno¾ství whitespace navíc: prázdné øádky, mezery
+  - Zahazování posledního øádku
+  - Nezachovávání prázdných øádkù 
+
+Nejèastìj¹í chyby v èásti b)
+----------------------------
+
+Pamì»ové chyby
+  - Práce s neinicializovanou pamìtí: typicky htable_init alokující pole
+    ukazatelù, které neinicializuje
+  - Práce s uvolnìnou pamìtí: typicky htable_clear, která opìt nenastaví
+    NULL ukazatelùm v poli (a dal¹í operace s takto vyèi¹tìným polem tak
+    pracují s touto uvolnìnou pamìtí)
+  - Práce s klíèem: rozumné øe¹ení je dìlat si lokální kopii klíèe, a
+    neukládat si pouze pøedaný ukazatel. Takový øetìzec mù¾e pøestat
+    existovat (literál, nebo ho nìco uvolní) nebo ho tøeba nìco zmìní.
+  - Pokud u¾ se øetìzec kopíroval, pak èastou chybou byla nedostateèná
+    alokace podle strlen(): vrací poèet znakù v øetìzci *bez* ukonèovací
+    nuly, tak¾e je potøeba alokoval strlen+1. Nebo pou¾ít strdup.
+
+Doporuèení
+----------
+- Pou¾ívejte valgrind: pøípadù kdy l¾e, je opravdu velmi málo.
+- Nepøedpokládejte, ¾e alokovaná pamì» je vynulovaná. V testování mù¾e
+  pomoci promìnná prostøedí MALLOC_PERTURB_ (google napoví), která
+  zpùsobí výraznì nepøátelské chování pamì»ového alokátoru.
+- Pøemý¹lejte nad mo¾nými hodnotami v¹ech vstupù a tím jak ovlivní vá¹
+  program a zpracování takového vstupu. Zamìøte se na hranièní hodnoty,
+  hodnoty v jejich blízkém okolí, pøíli¹ vysoké, zcela neplatné, 0,
+  nebo chybìjící.

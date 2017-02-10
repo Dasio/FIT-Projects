@@ -1,0 +1,137 @@
+Číselné hodnocení zde uvedené je v minibodech, jejichž převod na finální body se řídí několika pravidly:
+  1) minibody za dokumentaci přepočteme kurzem 100 minibodů = 1 bod
+  2) minibody za automatické hodnocení skriptu se vyhodnotí dle kurzu specifickém pro Vaši úlohu:
+        CHA	109 mb = 1 bod
+Nakonec následuje korelace a zaokrouhlení dle informací o hodnocení v obecném zadání.
+
+Hodnocené úlohy zatím nebyly testovány na plagiátorství (termín je do posledního termínu zkoušky).
+
+Úloha byla nejdříve automaticky rozbalena z odevzdaného archivu a pak byly spuštěny testy na serveru Merlin. Hodnotící testy nebudou zveřejněny. Hodnocení v rámci dokumentace dále zahrnuje také hodnocení kvality zdrojových kódů, komentářů atd.
+
+V případě nesouhlasu s hodnocením je možné využít osobní reklamace ve vypsaných termínech (viz IS FIT, Termíny IPP, Reklamace hodnocení 2. úlohy). Projděte si i komentář termínu s pokyny. Na individuální elektronické dotazy bude reagováno s nižší prioritou.
+
+
+Hodnocení dokumentace:
+----------------------
+  Získané minibody: 180
+  Komentář k hodnocení: COMMENT (-20mb), KAPTXT (-0mb);;
+
+Vysvětlivky zkratek v dokumentaci:
+  CH = pravopisné chyby, překlepy
+  FORMAT = špatný formát vzhledu dokumentu (nedodrženy požadavky)
+  SHORT = nesplňuje minimální požadavky na délku či obsah
+  STRUCT = nevhodně strukturováno (např. bez nadpisů)
+  MISSING = dokumentace nebyla odevzdána
+  COPY = text obsahuje úryvky ze zadání nebo cizí necitované materiály
+  STYLE = stylizace vět, nečitelnost, nesrozumitelnost
+  COMMENT = chybějící nebo nedostatečné komentáře ve zdrojovém textu
+  FILO = chybí či nedostatečná filosofie návrhu (abstraktní popis struktury programu, co následuje za čím)
+  SRCFORMAT = opravdu velmi špatná štábní kultura zdrojového kódu
+  LANG (jen pro informaci) = míchání jazyků (většinou anglické termíny v českém textu)
+  HOV (jen pro informaci) = hovorové nebo nevhodné slangové výrazy
+  PRED (jen pro informaci) = pozor na neslabičné předložky na konci řádků
+  FORM (jen pro informaci) = nepěkná úprava, nekonzistentní velikost a typ písma apod.
+  BLOK (jen pro informaci) = chybí zarovnaní do bloku místo méně pěkného zarovnání na prapor (doleva)
+  KAPTXT (jen pro informaci) = mezi nadpisem a jeho podnadpisem by měl být vždy nějaký text
+  MEZ (jen pro informaci) = za otevírající nebo před zavírající závorku mezera nepatří
+  ICH (jen pro informaci) = ich-forma (psaní v první osobě jednotného čísla) není většinou vhodná pro programovou dokumentaci
+  TERM = problematická terminologie (neobvyklá, nepřesná či přímo špatná)
+  SAZBA (jen pro informaci) = alespoň identifikátory proměnných a funkcí se patří sázet písmem s jednotnou šířkou písmen (např. font Courier)
+  OK = k dokumentaci byly maximálně minoritní připomínky
+
+
+Informace o rozbalení odevzdaného archívu:
+------------------------------------------
+Extracting xmikus15/xmikus15-CHA.zip archive..
+Archive:  xmikus15-CHA.zip
+  inflating: CHA-doc.pdf             
+  inflating: Errors.py               
+  inflating: Function.py             
+  inflating: HeaderParser.py         
+  inflating: cha.py                  
+ extracting: rozsireni               
+Setting read-right to *.py, *.py3, and rozsireni...
+Checking file Errors.py as script filename...
+Checking file Function.py as script filename...
+Checking file HeaderParser.py as script filename...
+Checking file cha.py as script filename...
+Script filename (cha.py) is OK.
+
+
+Hodnocení skriptu (základní i rozšířené testy):
+-----------------------------------------------
+Následuje dvojtečkou oddělený seznam testů.
+  Jméno testu:Vaše hodnocení [mb]:[rozšíření]:Metadata testu:Komentář do konce řádku.
+Na konci naleznete celkový součet v nenormalizovaných minibodech.
+
+tests/basic/test01:10:[]:tests/basic/test01.cmd:test01: zkouska parametru --help (nekontroluje vystup na stdout)
+tests/basic/test02:20:[]:tests/basic/test02.cmd:test02: test parametru --help s jinym
+tests/basic/test03:10:[]:tests/basic/test03.cmd:test03: Zkouska --help vypisovaneho na stdout
+tests/cha/test04:10:[]:tests/cha/test04.cmd:test4: basic: a file containing no data
+tests/cha/test05:10:[]:tests/cha/test05.cmd:test5: basic: missing --output parameter (output goes to stdout)
+tests/cha/test06:10:[]:tests/cha/test06.cmd:test6: basic: trivial file with a single function and nothing else
+tests/cha/test07:10:[]:tests/cha/test07.cmd:test7: basic: do not check the extension of a direct file
+tests/cha/test08:25:[]:tests/cha/test08.cmd:test8: basic: file with comments containing diacritic
+tests/cha/test09:25:[]:tests/cha/test09.cmd:test9: basic: function name contains underscores
+tests/cha/test10:35:[]:tests/cha/test10.cmd:test10: basic: input is a directory
+tests/cha/test11:20:[]:tests/cha/test11.cmd:test11: basic: --pretty-xml without k
+tests/cha/test12:20:[]:tests/cha/test12.cmd:test12: basic: --pretty-xml=10
+tests/cha/test13:20:[]:tests/cha/test13.cmd:test13: basic: --no-inline
+tests/cha/test14:20:[]:tests/cha/test14.cmd:test14: basic: --no-inline and --max-par=1
+tests/cha/test15:15:[]:tests/cha/test15.cmd:test15: basic: --max-par=0
+tests/cha/test16:15:[]:tests/cha/test16.cmd:test16: basic: --max-par=2
+tests/cha/test17:20:[]:tests/cha/test17.cmd:test17: basic: --no-duplicates
+tests/cha/test18:20:[]:tests/cha/test18.cmd:test18: basic: --no-duplicates and --max-par=1 and --no-inline
+tests/cha/test19:10:[]:tests/cha/test19.cmd:test19: basic: whitespace between types should be preserved (1)
+tests/cha/test20:10:[]:tests/cha/test20.cmd:test20: basic: whitespace between types should be preserved (2)
+tests/cha/test21:10:[]:tests/cha/test21.cmd:test21: basic: whitespace between types should be preserved (3)
+tests/cha/test22:10:[]:tests/cha/test22.cmd:test22: basic: --remove-whitespace (1)
+tests/cha/test23:15:[]:tests/cha/test23.cmd:test23: basic: --remove-whitespace (2)
+tests/cha/test24:10:[]:tests/cha/test24.cmd:test24: basic: --remove-whitespace (3)
+tests/cha/test25:20:[]:tests/cha/test25.cmd:test25: basic: a definition is a declaration
+tests/cha/test26:15:[]:tests/cha/test26.cmd:test26: basic: ignore function declarations in comments (// , /* */)
+tests/cha/test27:15:[]:tests/cha/test27.cmd:test27: basic: ignore function declarations in comments in comments
+tests/cha/test28:10:[]:tests/cha/test28.cmd:test28: basic: ignore function declarations in // comments ending with \
+tests/cha/test29:10:[]:tests/cha/test29.cmd:test29: basic: comments in strings
+tests/cha/test30:10:[]:tests/cha/test30.cmd:test30: basic: strings in comments
+tests/cha/test31:15:[]:tests/cha/test31.cmd:test31: basic: ignore function declarations in strings
+tests/cha/test32:15:[]:tests/cha/test32.cmd:test32: basic: ignore function declarations in macros
+tests/cha/test33:10:[]:tests/cha/test33.cmd:test33: basic: ignore function declarations in macros (after \, the macro continues)
+tests/cha/test34:10:[]:tests/cha/test34.cmd:test34: basic: function declarations parsing (1)
+tests/cha/test35:25:[]:tests/cha/test35.cmd:test35: basic: function declarations parsing (2)
+tests/cha/test36:35:[]:tests/cha/test36.cmd:test36: basic: function declarations parsing (3)
+tests/cha/test37:35:[]:tests/cha/test37.cmd:test37: basic: function declarations parsing (4)
+tests/cha/test38:40:[]:tests/cha/test38.cmd:test38: basic: function declarations parsing (5)
+tests/cha/test39:45:[]:tests/cha/test39.cmd:test39: basic: function declarations parsing (6)
+tests/cha/test40:45:[]:tests/cha/test40.cmd:test40: basic: function declarations parsing (7)
+tests/cha/test41:5:[]:tests/cha/test41.cmd:test41: error: invalid parameter
+tests/cha/test42:5:[]:tests/cha/test42.cmd:test42: error: --help with another parameter
+tests/cha/test43:5:[]:tests/cha/test43.cmd:test43: error: multiple occurrences of --input
+tests/cha/test44:5:[]:tests/cha/test44.cmd:test44: error: multiple occurrences of --output
+tests/cha/test45:5:[]:tests/cha/test45.cmd:test45: error: multiple occurrences of --pretty-xml
+tests/cha/test46:5:[]:tests/cha/test46.cmd:test46: error: multiple occurrences of --no-inline
+tests/cha/test47:5:[]:tests/cha/test47.cmd:test47: error: multiple occurrences of --max-par
+tests/cha/test48:5:[]:tests/cha/test48.cmd:test48: error: missing n after --max-par=
+tests/cha/test49:5:[]:tests/cha/test49.cmd:test49: error: invalid n (not a number) after --max-par=
+tests/cha/test50:5:[]:tests/cha/test50.cmd:test50: error: invalid n (not a number) after --pretty-xml=
+tests/cha/test51:5:[]:tests/cha/test51.cmd:test51: error: non-existing input file
+tests/cha/test52:2:[]:tests/cha/test52.cmd:test52: error: unopenable input file
+tests/cha/test53:5:[]:tests/cha/test53.cmd:test53: error: unopenable output file
+tests/cha/test54:10:[FUN]:tests/cha/test54.cmd:test54: FUN: complex function declarations (1)
+tests/cha/test55:20:[FUN]:tests/cha/test55.cmd:test55: FUN: complex function declarations (2)
+tests/cha/test56:25:[FUN]:tests/cha/test56.cmd:test56: FUN: complex function declarations (3)
+tests/cha/test57:25:[FUN]:tests/cha/test57.cmd:test57: FUN: complex function declarations (4)
+tests/cha/test58:0:[FUN]:tests/cha/test58.cmd:test58: FUN: complex function declarations (5)
+tests/cha/test59:20:[PAR]:tests/cha/test59.cmd:test59: PAR: parameters without names (1)
+tests/cha/test60:0:[PAR]:tests/cha/test60.cmd:test60: PAR: parameters without names (2)
+tests/cha/test61:0:[PAR]:tests/cha/test61.cmd:test61: PAR: parameters without names (3)
+tests/cha/test62:15:[PAR]:tests/cha/test62.cmd:test62: PAR: parameters without names (4)
+tests/cha/test63:0:[PAR]:tests/cha/test63.cmd:test63: PAR: parameters without names (5)
+tests/cha/test64:35:[]:tests/cha/test64.cmd:test64: basic: input is a directory (advanced)
+tests/cha/test65:10:[]:tests/cha/test65.cmd:test65: basic: whitespace between types should be preserved (4)
+tests/cha/test66:10:[]:tests/cha/test66.cmd:test66: basic: whitespace between types should be preserved (5)
+tests/cha/test67:10:[]:tests/cha/test67.cmd:test67: basic: --remove-whitespace (4)
+tests/cha/test68:10:[]:tests/cha/test68.cmd:test68: basic: --remove-whitespace (5)
+ZAKLAD MINIBODU:872
+BONUS  MINIBODU:115
+CELKEM MINIBODU:987
