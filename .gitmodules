@@ -1,0 +1,6 @@
+[submodule "IFJ"]
+	path = IFJ
+	url = https://github.com/Dasio/IFJ
+[submodule "ICP"]
+	path = ICP
+	url = https://github.com/Dasio/ICP
