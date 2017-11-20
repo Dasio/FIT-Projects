@@ -1,2 +1,41 @@
 # FIT-Projects
-School projects
+
+FIT VUT School projects
+
+IAL
+
+ICP
+
+IDS
+
+IFJ
+
+IIS
+
+IJC
+
+IMP
+
+INC
+
+INP
+
+IOS
+
+IPK
+
+IPP
+
+ISA
+
+ISS
+
+ITO
+
+ITS
+
+IUS
+
+IZG
+
+IZP
