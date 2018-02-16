@@ -1,0 +1,7 @@
+Nedostatky:
+- nezdokokumentovana implementacia pds-chooser a pds-massspoof - ale malo by byt funkcne
+- nedokoncena dokumentacia
+- v Scanneri sa vyuziva len 1 IPv4 a 1 IPv6 adresa vstupneho rozhrania
+- IPv6 Scanner bezi pokial 3x v priebehu 2s nedostane ziaden IPv6 packet, takze teoreticky moze bezat donekonecna
+	- ale pri Ctrl+C max do 2s sa scanner ukonci a ulozi vystup
+

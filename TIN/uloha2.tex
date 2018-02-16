@@ -1,0 +1,536 @@
+% Šáblona prevzatá od Mareka Milkoviča
+% https://github.com/metthal/TIN-Ulohy
+
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb,amsfonts}
+\usepackage[slovak]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{enumitem}
+\usepackage{ifthen}
+\usepackage{tikz}
+\usetikzlibrary{chains,fit,shapes}
+
+\usepackage{tikz-qtree}
+\usepackage{caption}
+\usepackage{background}
+\usepackage{float}
+
+\usetikzlibrary{arrows,automata,calc,positioning}
+
+\newcommand{\task}[2]{\par \noindent \textbf{{#1}.} \hspace{3pt} #2 \vspace{10pt}}
+\newcommand{\solution}{\vspace{10pt}}
+\newcommand{\pipesep}{\hspace{3pt} \vert \hspace{3pt}}
+
+\newenvironment{subtasklist}[0]{\begin{enumerate}[label=(\alph*)]}{\end{enumerate}}
+\newenvironment{mysolution}[1]{
+    \par \textbf{Riešenie} \newline
+    \ifthenelse{\equal{#1}{subtasks}}{\begin{enumerate}[label=(\alph*)]}
+            {\begin{enumerate}[label={}] \item}
+}{\end{enumerate} \newpage}
+\newcommand{\subtask}{\item}
+
+\SetBgContents{
+        \parbox{0.4\textwidth}{
+            \raggedleft
+                Dávid Mikuš\\
+                \texttt{xmikus15}
+        }
+}
+\SetBgScale{0.75}
+\SetBgOpacity{1}
+\SetBgAngle{0}
+\SetBgColor{black}
+\SetBgPosition{current page.north east}
+\SetBgVshift{-0.8cm}
+\SetBgHshift{-3.5cm}
+ 
+\begin{document}
+ 
+\title{TIN 2017/2018: Úloha 2}
+\author{Dávid Mikuš \\ \small\texttt{xmikus15@stud.fit.vutbr.cz}}
+\maketitle
+
+\task{1}{
+Uvažujte nasledujúce dva tvrdenia, z ktorých ani jedno neplatí.
+\begin{enumerate}[label=(\alph*)]
+\item Nech $A$ je množina všetkých \textit{regulárnych} jazykov nad abecedou $\{a,b\}$ a $B$ je množina vsetkých \textit{rekurzívnych vyčislitelnych} jazykov nad abecedou $\{a,b\}$. Množiny $A$ a $B$ \textit{nemajú} rovnakú mohutnosť.
+\item Nech $A = 2^{\{a\}^*}$ a $B = 2^{\{a,b\}^*}$, t.j. $A$ je množina \textit{všetkých} jazykov nad abecedou $\{a,b\}$. Množiny $A$ a $B$ \textit{nemajú} rovnakú mohutnosť.
+\end{enumerate}
+}
+Uvažujte nasledujúci dôkaz diagonalizaciou (podobný dôkazu Lemma 6.1.1 z Opory), ktorý by sme chceli použiť pre dôkaz oboch tvrdení.
+\begin{enumerate}[label=\roman*.]
+\item Predpokladajme, že $A$ aj $B$ \textit{majú} rovnakú mohutnosť. Potom existuje bijekcia $f : A \to B$.
+\item \label{mistake_b} Prvky množiny $A$ je možné indexovat prirodzenými čislami a zoradiť do postupnosti $L_1,L_2,L_3,...$.
+\item Slová nad $\{a,b\}$ je tiež možné zoradiť do postupnosti $w_1, w_2, w_3, ...$ (napr. lexikograficky).
+\item $f$ potom môžeme zobraziť nekonečnú maticu $m$, kde $m_{ij}$ je 1, ak $w_j \in f(L_i)$, a inak 0:
+\begin{table}[H]
+				\centering
+				\begin{tabular}{cccccc}
+								& $w_1$	& $w_2$	& $w_3$	& ...   \\
+					$f(L_1)$	& 1 	& 0 	& 1 	& ... & \\
+					$f(L_2)$	& 0 	& 0 	& 1 	& ... & \\
+					$f(L_3)$	& 1 	& 1		& 1 	& ... & \\
+					...			& ... 	& 	... & ... 	& ...        
+				\end{tabular}
+			\end{table}
+\item Uvažujme jazyk $L \subset \{a,b\}^*$, ktorý vznikne komplementáciou diagonály, teda \\
+$L = \{w_i | w_i \notin f(L_i), i \geq 1 \}$ ($w_i \in L$ práve keď $M_{ii} = 0$).
+\item Jazyk $L$ sa zrejme líši od každého jazyka $f(L_i), i > 0$ (aspoň slovom $w_i$).
+\item \label{mistake_a} Zároveň je jazyk $L$ v $B$.
+\item To ale znamená, že $f$ nie je surjektívne, a teda nemôže byť bijekciou. Spor s (i).
+\end{enumerate}
+Pre oba tvrdenia najdete chybný dôkaz a stručne vysvetlite, prečo je chybný (nemusíte dokazovať, že je chybný, len dvoma až troma vetami vysvetlite, čo je zle a prečo). Ďalej dokážte negaciu tvrdenia 1a, t.j. že $A$ a $B$ z 1a \textit{majú} rovnakú mohutnosť.
+\newpage
+\begin{mysolution}
+CChybné kroky: 
+\begin{enumerate}[label=(\alph*)]
+\item Krok \ref{mistake_a} je chybný pretože jazyk $L$ nepatrí do $B$.
+Uvažujme jazyk $L_D$ ktorý popisuje diagonálu, tento jazyk je rekurzivne vyčislitelny (vieme zostrojiť TS). Jazyk $L$ je komplement diagonály, teda $L = \overline{L_D}$. A trieda rekurzivne vyčislitelnych jazykov nie je uzavretá voči komplementu.
+%Kedže $f(L_i)$ je rekurzívne vyčisliteľny jazyk, tak existuje TS $M_i$ ktorý ho prijíma. Uvažujme ďalší TS $M_j$ ktorý prijíma jazyk $L$ a reťazec $w_j$, ak $M_j$ príjme $w_j$, potom na $j$-itom riadku a stĺpci musí byť 1, čo znamená že $w_j \notin L$, ale potom $M_j$ nemôže prijať $w_j$ čo je spor. \\
+%Ak by $M_j$ neprijal $w_j$, tak na $j$-tom riadkua  stĺpci musí byť 0, čize $w_j \in L$, ale potom $M_j$ prijíma $w_j$ čo je znova spor. \\
+Čiže jazyk $L$ nie je rekurzívne vyčislitelny a tým pádom nepatrí do $B$.
+
+\item Krok \ref{mistake_b} je chybný, pretože potenčná množina je nespočitatelna. Nespočetnú množinu nevieme indexovat a zoradiť.
+
+\end{enumerate}
+Dôkaz že $A$ a $B$ z 1a \textit{majú} rovnakú mohutnosť: \\
+Vychádzame z vety 9.1 (slidy) že množina jazykov typu 0 je spočetná, tým pádom aj množina regulárnych jazykov je spočetná.
+Spočetné množiny majú rovnaku mohutnosť ako prirodzeně čísla, takže vieme kazdemu prvku z množiny $A$ aj $B$ priradiť prirodzené čislo, čiže $|A| = |\mathbb{N}| \land |B| = |\mathbb{N}|$, tým pádom $|A| = |B|$. A teda množiny $A,B$ \textit{majú} rovnakú mohutnosť.
+\end{mysolution}
+
+\task{2}{
+Uvažujte problém, či je jazyk daného TS regulárny. Rozhodnite, či je tento problem rozhodnuteľný a či je čiastočne rozhodnuteľný. Svoje tvrdenia formálne dokážte. 
+}
+\begin{mysolution}
+
+Problém si definujeme ako jazyk $REG$: \\
+$ REG = \{{<}M{>} \ |  \ L(M) \in \mathcal{L}_3 \} $ \\
+Čiastočnú nerozhodnuteľnosť budeme dokazovať redukciou komplementu problému zastavenia o ktorom vieme že nie je ani čiastočne rozhodnuteľny.  \\
+$ co-HP = \{{<}M{>}\#{<}w{>} \ | \  M \ \text{sa nezastaví na } w \} $ \\
+Zostavíme redukciu $\sigma: \{0,1,\#\} \to \{0,1\}^*$ redukujúcu $co-HP$ na $REG$. Redukciu $\sigma$ budeme reprezentovať $TS_\sigma$, ktorý zo vstupu $x \in \{0,1\}^*$ vygeneruje kód $TS M_x$ fungujúci následovne:
+\begin{enumerate}
+	\item Stroj $TS M_x$ bude viac páskovy, na 1. páske ma svoj vstup $w$ a na 2. pásku si nakopíruje $x$.
+	\item Overǐ či $x$ je platnou instanciou $co-HP$ a teda či je v tvare $x_1 \# x_2$
+	\begin{enumerate}
+	\item Ak nie je, tak overí $w$ či je  v tvare $0^n1^n$. Ak je v takomto tvare tak príjme, inak odmietne.
+	\item Ak je, tak $M_x$ simuluje $x_1$ so vstupom $x_2$ pomocou UTS. Ak sa táto simulácia zastaví tak $M_x$ prijme $w  =0^n1^n$. Ak bude cykliť tak neprijme.
+	\end{enumerate}
+\end{enumerate}
+
+Ukážeme že $M_\sigma$ je možné zostrojiť ako úplny TS. $M_\sigma$ musí vediet vykonať nasledujúce:
+\begin{itemize}
+\item Zistiť či $x$ je platnou instanciou $co-HP$, čo zodpovedá zisteniu prislušnosti v triede regulárnych jazykov
+\item Zostrojiť $M_x$ ktorý vie prijať bezkontextový jazyk $0^n1^n n > 0$. Toto vieme vykonať simuláciou zásobnikoveho automatu na UTS.
+\end{itemize}
+Zistenie príslušnosti v triede regulárnych jazykov vieme zistiť pomocou konečného automatu, ktorý vieme simulovať na TS. Simuláciu zásobnikoveho automatu môžeme vykonať 2 páskovym TS, z 1. pásky sa bude len čítať znak po znaku, z ľava doprava. 2. páska bude služit ako zásobnik.
+
+O $L(M_x)$ vieme že:
+\begin{enumerate}
+\item $L(M_x) = \emptyset \iff$  ($x$ nie je v tvare $x_1\#x_2$ a $w$ nie je v tvare $0^n1^n$) alebo ($x$ je v tvare $x_1\#x_2$ a TS s kǒdom $x_1$ a vstupom $x_2$ nezastavi). 
+\item $L(M_x) = \{0,1\}^* \iff$  ($x$ nie je v tvare $x_1\#x_2$ a $w$ je v tvare $0^n1^n$) alebo ($x$ je v tvare $x_1\#x_2$ a TS s kǒdom $x_1$ a vstupom $x_2$ zastavi)
+\end{enumerate}
+\begin{flalign*}
+x \in co-HP &\iff x \text{ má štruktúru } x_1\#x_2 \text{ a } x_1 \text{ je TS ktorý zastaví na reťazci s kódom }x_2 \\
+& \iff L(M_x) = \emptyset \iff <M_x> \in REG
+\end{flalign*}
+Redukciou sme dokázali že jazyk $REG$ nie je rekurzivne vyčislitelny(a ani rekurzivny) na základe jazyka $co-HP$ o ktorom vieme že  nie je rekurzivne vyčislitelny(a ani rekurzivny).
+Kedže tento jazyk nie je rekurzivny a ani rekurzivne vyčislitelny, tak je nerozhodnutelny a nie je ani čiastočne rozhodnutelny.
+\end{mysolution}
+
+\task{3}{
+Na obrázku je TS $M$.
+\begin{figure}[!h]
+		\centering
+		\begin{tikzpicture}[node distance = 3.0cm, ->, >=stealth, line width=1pt]
+			\node[state, initial right, initial text=] (1) {1};
+			\node[state, above of = 1] (2) {2};
+			\node[state, left of = 2] (3) {3};
+			\node[state, above of = 2] (4) {4};
+			\node[state, left of = 3] (5) {5};
+			\node[state, above of = 5] (6) {6};
+			\node[state, below of = 5] (8) {8};
+			\node[state, left of = 8] (7) {7};
+			\node[state, accepting, right of = 8] (9) {9};
+			
+			\path (1) edge node[right]{$\Delta/R$} (2);
+			\path (2) edge node[below]{$a/R$} (3);
+			\path (3) edge node[above]{$b/R$} (4);
+			\path (4) edge[in=35, out=80, looseness=6] node[right]{$e/R$} (4);
+			\path (4) edge node[right]{$a/R$} (2);
+			\path (3) edge node[below]{$\Delta/L$} (5);
+			\path (5) edge node[right]{$a/\Delta$} (6);
+			\path (5) edge[bend right=70] node[right]{$b/\Delta$} (6);
+			\path (6) edge[bend right=70] node[left]{$\Delta/L$} (5);
+			\path (5) edge node[left]{$\Delta/R$} (7);
+			\path (7) edge node[above]{$\Delta/Y$} (8);
+			\path (8) edge node[above]{$Y/L$} (9);
+			
+		\end{tikzpicture}
+	\end{figure}
+\begin{itemize}
+	\item Zostrojte gramatiku $G$ takú, že $L(G) = L(M)$.
+	\item Pre nejaké slovo $w \in L(M)$ popíšte prijmajúci beh stroja $M$ na $w$ a deriváciu $w$ v $G$.
+\end{itemize}
+}
+\begin{mysolution}
+
+	\vspace{-1.5cm}
+	\begin{flalign*}
+		G &= (N,\Sigma,P,S) & \\
+		N &= \{S,A\} & \\
+		\Sigma &= \{a,b\} & \\
+		P&: & \\
+		  &S \to aA & \\
+		  &A \to baaA &\\ 
+		  &A \to \varepsilon & 
+	\end{flalign*}
+
+	Zvolíme si slovo $w = a$. Beh TS je znázornený prechodmi medzi konfiguráciami TS $Q \times \{\gamma \Delta^\omega \mid \gamma \in \Gamma^*\} \times \mathbb{N}$ nasledovne:
+	\begin{align*}
+	&(1,\underline{\Delta} a \Delta\Delta^{\omega},0) \vdash (2,\Delta \underline{a} \Delta\Delta^{\omega},1)
+		\vdash (3,\Delta a \underline{\Delta}\Delta^{\omega},2) \vdash (5,\Delta \underline{a} \Delta\Delta^{\omega},1) \vdash \\
+	&(6,\Delta \underline{\Delta} \Delta\Delta^{\omega},1) \vdash (5,\underline{\Delta} \Delta \Delta\Delta^{\omega},0)
+		\vdash (7,\Delta \underline{\Delta} \Delta\Delta^{\omega},1) \vdash (8,\Delta \underline{Y} \Delta\Delta^{\omega},1) \vdash \\
+	&(9,\underline{\Delta} Y \Delta\Delta^{\omega},0)
+	\end{align*}
+
+	Derivácia slova $w = a$ v gramatike $G$ je nasledovná:
+	\begin{equation*}
+		S \Rightarrow aA \Rightarrow a
+	\end{equation*}
+\newpage
+Alternátivne riešenie podľa algoritmu zo slidov (veta 8.1) \\
+	$G_{alg} = (\{1,2,3,4,5,6,7,8,9,Y,[,],\Delta\},\{a,b,e\},P_{alg},S_{alg})$ \\
+	$P_{alg}$: \\
+	\vspace{-0.8cm}
+	\begin{flalign*}
+		  &S_{alg} \to [9\Delta Y \Delta] &
+		  &\Delta 2 \to 1\Delta &
+		  &5a\Delta \to a6\Delta &\\ 
+		  &\Delta ] \to \Delta \Delta ] &
+		  &a3 \to 2a &
+		  &5b\Delta \to b6\Delta &\\ 
+		  &6\Delta \to 5a &
+		  &b4 \to 3b &
+		  &5e\Delta \to e6\Delta &\\ 
+		  &6\Delta \to 5b &
+		  &e4 \to 4e &
+		  &5Y\Delta \to Y6\Delta &\\ 
+		  &8Y \to 7\Delta &
+		  &a2 \to 4a &
+		  &5 \Delta \Delta \to \Delta 6 \Delta &\\ 
+		  & &
+		  &\Delta 7 \to 5 \Delta &
+		  & &		  
+	\end{flalign*}
+	\vspace{-0.5cm}
+	\begin{flalign*}
+		  &5a\Delta \to a3\Delta &
+		  &9aY \to a8Y &
+		  &[1\Delta \to \varepsilon &\\ 
+		  &5b\Delta \to b3\Delta &
+		  &9bY \to b8Y &
+		  &\Delta \Delta ] \to \Delta ] &\\ 
+		  &5e\Delta \to e3\Delta &
+		  &9eY \to e8Y &
+		  &\Delta ] \to \varepsilon &\\ 
+		  &5Y\Delta \to Y3\Delta &
+		  &9\Delta Y \to \Delta 8Y &
+		  & &\\ 
+		  &5\Delta\Delta \to \Delta 3 \Delta &
+		  &9YY \to Y8Y &
+		  & &
+	\end{flalign*}
+Derivácia slova $w = a$ v gramatike $G_{alg}$ je nasledovná:
+	\begin{align*}
+		S_{alg} &\Rightarrow [9\Delta Y \Delta] \Rightarrow [\Delta 8Y\Delta] \Rightarrow [\Delta 7 \Delta \Delta] \Rightarrow [5 \Delta \Delta \Delta ] \Rightarrow [\Delta 6 \Delta \Delta] \Rightarrow [\Delta 5 \Delta \Delta] \Rightarrow [\Delta a3 \Delta] \Rightarrow [\Delta 2a \Delta] \\
+&\Rightarrow [1\Delta a \Delta] \Rightarrow a \Delta ] \Rightarrow a
+\end{align*}
+
+\tiny{\textit{Aj keď v zadaní nie je uvedené algoritmitický tak som radšej dodatočne uviedol aj toto riešenie, pretože sa ku mne dostalo že moje prvotné riešenie by trebalo dokázať, že}} $L(G) = L(M)$. \textit{Toto by malo platiť a zaroveň aj} $L(G) = L(G_{alg})$
+\end{mysolution}
+
+\task{4}{
+\textit{Hopsajúci bobor} (Backjumping Beaver; BB) je šestica tvaru $B = (Q, \Sigma, \Gamma, \delta, q_0, q_F)$, kde:
+\begin{itemize}
+\setlength\itemsep{0.1em}
+\item $Q$ je konečná množina stavov,
+\item $\Sigma$ je vstupná abeceda, $\Delta \notin \Sigma$,
+\item $\Gamma$ je páskova abeceda, $\Sigma \cup \{\Delta\} \subseteq \Gamma$,
+\item $\delta$ je (parciálna) prechodová funkcia $\delta : (Q \setminus \{q_F\}) \times \Gamma^2 \to Q \times (\Gamma \cup \{R, J\})$, kde $\{R,J\} \cap = \emptyset$
+\item $q_0 \in Q$ je počiatočný stav a 
+\item $q_F \in Q$ je koncový stav.
+\end{itemize}
+
+Uvažujte rovnakú definiciu konfigurácie ako pre TS. \textit{Krok výpočtu} BB $B$ je definovaný následovne:
+\begin{itemize}
+\item $(q_1, \gamma, n) \underset{B}\vdash\ (q_2, \gamma, n + 1)$ pre $\delta(q_1, \gamma_n, \gamma_{n+1}) = (q_2, R)$,
+\item $(q_1, \gamma, n) \underset{B}\vdash (q_2, \gamma, 0)$ pre $\delta(q_1, \gamma_n, \gamma_{n+1}) = (q_2, J)$ a
+\item $(q_1, \gamma, n) \underset{B}\vdash (q_2, s^n_b(\gamma), n)$ pre $\delta(q_1, \gamma_n, \gamma_{n+1}) = (q_2, b)$,
+\end{itemize}
+pre $q_1, q_2 \in Q, \gamma \in \Gamma^\omega, n \in \mathbb{N}$ a $b \in  \Gamma$. \textit{Prijatie reťazca} a \textit{jazyk} $L(B)$ sú definované rovnako ako pre TS. \\
+Dokážte, alebo vyvraťte tvrdenie, že trieda jazykov prijimanych $BB$ je práve $\mathcal{L}_0$ (nezabudnite spraviť oba smery dôkazu).
+}
+\begin{mysolution}
+
+Idea dôkazu je dokázať ekvivalenciu $BB$ s $TS$, kedže $TS$ prijǐma práve triedu $\mathcal{L}_0$. Ekvivalenciu budeme dokazovať transformáciou jedneho stroja na druhý:
+\begin{enumerate}
+\item Simulácia $BB$ na $TS$
+\item Simulácia $TS$ na $BB$
+\end{enumerate}
+
+Zjednodušený rozdiel $BB$ od $TS$ je že $BB$ vie čítat 2 znaky naraz, ale nevie presunút hlavu doľava. 
+\begin{enumerate}
+\item Simuláciu budeme robiť na 2 páskovom TS.
+Na 2. pásku dáme symbol $\Delta$ na nultu pozíciu a následne okopirujeme 1. pásku na druhú. Presunieme hlavy oboch pások na prvú pozíciu. Prva páska bude slúžiť na simulovanie čitania znaku za hlavou. \\
+\textit{Podčiarknutý symbol značí aktuálnu pozíciu hlavy} \\
+\begin{tikzpicture}
+\tikzstyle{every path}=[thick]
+
+\edef\sizetape{0.7cm}
+\tikzstyle{tmtape}=[draw,minimum size=\sizetape]
+\tikzstyle{tmhead}=[arrow box,draw,minimum size=.5cm,arrow box
+arrows={east:.25cm, west:0.25cm}]
+\begin{scope}[start chain=1 going right,node distance=-0.15mm]
+    \node [on chain=1,tmtape] {$\Delta$};
+    \node [on chain=1,tmtape] {$\underline{a}$};
+    \node [on chain=1,tmtape] {$b$};
+    \node [on chain=1,tmtape] {$c$};
+    \node [on chain=1,tmtape] {$\Delta$};
+    \node [on chain=1,tmtape] {$\Delta$};
+    \node [on chain=1] {1.páska};
+\end{scope}
+
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\tikzstyle{every path}=[thick]
+
+\edef\sizetape{0.7cm}
+\tikzstyle{tmtape}=[draw,minimum size=\sizetape]
+\tikzstyle{tmhead}=[arrow box,draw,minimum size=.5cm,arrow box
+arrows={east:.25cm, west:0.25cm}]
+\begin{scope}[start chain=1 going right,node distance=-0.15mm]
+	\node [on chain=1,tmtape] {$\Delta$};
+    \node [on chain=1,tmtape] {$\underline{\Delta}$};
+    \node [on chain=1,tmtape] {$a$};
+    \node [on chain=1,tmtape] {$b$};
+    \node [on chain=1,tmtape] {$c$};
+    \node [on chain=1,tmtape] {$\Delta$};
+    \node [on chain=1] {2.páska};
+\end{scope}
+
+\end{tikzpicture}
+
+
+\begin{enumerate}
+\item Krok $R$ bude rovnaký ako na $BB$, presunieme hlavu oboch pások doprava.
+\item Čítanie symbolu pod hlavou $BB$ bude $TS$ vykonávat čítanim symbolu pod hlavou druhej pásky a čitanie symbolu za hlavou pásky $BB$ bude vykonávať $TS$ hlavou prvej pásky.
+\item Pri simulovaní zápisu symbolu, sa symbol zapíše na 2. pásku a na 1. páske sa spraví krok $L$, vykoná sa zápis a následne krok $R$, týmto zaručíme synchronizáciu oboch pások.
+\item Krok $J$ simulujeme opakovaním vykonávanim kroku $L$ na oboch pások pokým index hlavy nebude rovný $1$.
+\end{enumerate}
+
+
+\item Rozšírime si páskovu abecedu TS $\Gamma_{TS}$ na $\Gamma_{BB} = \Gamma_{TS} \times \{0,1\}$, kde 1. prvok dvojice bude symbol z pôvodnej páskovej abecedy, a 2. symbol bude značiť špecialna značka. V prechodoch, počiatnom a koncovom stave bude dvojica $\Gamma_{TS} \times {0}$ predstavovať pôvodny symbol z $\Gamma$. \\
+\begin{enumerate}
+\item Čítanie jedneho znaku $TS$ zaručíme na $BB$ tak že budeme brať ohľad len na symbol pod hlavou a na druhý symbol budeme ignorovať.
+\item Posun doprava zostáva nezmenený
+\item Posun doľava budeme simulovať tak že si najprv poznačíme symbol pod hlavou. $\Gamma_{TS} \times {0} \to \Gamma_{TS} \times {1}$ \\
+Spravíme krok $J$, čítame druhý symbol a posúvame sa na páske doprava pokiaľ nenarazíme na poznačený symbol. (Hlava skončí naľavo od poznačeného symbolu). \\
+Poznačíme si aktuálny symbol a posunieme sa doprava. \\
+Obnovíme stav, tak že odznačíme symbol $\Gamma_{TS} \times {1} \to \Gamma_{TS} \times {0}$ \\
+Spravíme krok $J$ a posúvame sa na páske doprava pokiaľ pod hlavou nebude označený symbol, odznačíme symbol a týmto sme simulovali prechod hlavy doľava.
+ \\
+\textit{Simulácia posuvu doľava - podčiarknutý symbol znači pozíciu hlavy} \\
+\begin{tikzpicture}
+
+\edef\sizetape{0.7cm}
+\tikzstyle{tmtape}=[draw,minimum size=\sizetape]
+\tikzstyle{tmhead}=[arrow box,draw,minimum size=.5cm,arrow box
+arrows={east:.25cm, west:0.25cm}]
+\begin{scope}[start chain=1 going right,node distance=-0.15mm]
+    \node [on chain=1,tmtape] {$(\Delta,0)$};
+    \node [on chain=1,tmtape] {$(a,0)$};
+    \node [on chain=1,tmtape] {$(b,0)$};
+    \node [on chain=1,tmtape] {$\underline{(c,0)}$};
+    \node [on chain=1,tmtape] {$(\Delta,0)$};
+    \node [on chain=1] {Hlava je na znaku c};
+\end{scope}
+
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\edef\sizetape{0.7cm}
+\tikzstyle{tmtape}=[draw,minimum size=\sizetape]
+\tikzstyle{tmhead}=[arrow box,draw,minimum size=.5cm,arrow box
+arrows={east:.25cm, west:0.25cm}]
+\begin{scope}[start chain=1 going right,node distance=-0.15mm]
+    \node [on chain=1,tmtape] {$(\Delta,0)$};
+    \node [on chain=1,tmtape] {$(a,0)$};
+    \node [on chain=1,tmtape] {$(b,0)$};
+    \node [on chain=1,tmtape] {$\underline{(c,1)}$};
+    \node [on chain=1,tmtape] {$(\Delta,0)$};
+    \node [on chain=1] {Poznačíme};
+\end{scope}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\edef\sizetape{0.7cm}
+\tikzstyle{tmtape}=[draw,minimum size=\sizetape]
+\tikzstyle{tmhead}=[arrow box,draw,minimum size=.5cm,arrow box
+arrows={east:.25cm, west:0.25cm}]
+\begin{scope}[start chain=1 going right,node distance=-0.15mm]
+    \node [on chain=1,tmtape] {$\underline{(\Delta,0)}$};
+    \node [on chain=1,tmtape] {$(a,0)$};
+    \node [on chain=1,tmtape] {$(b,0)$};
+    \node [on chain=1,tmtape] {$(c,1)$};
+    \node [on chain=1,tmtape] {$(\Delta,0)$};
+    \node [on chain=1] {Operácia J};
+\end{scope}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\edef\sizetape{0.7cm}
+\tikzstyle{tmtape}=[draw,minimum size=\sizetape]
+\tikzstyle{tmhead}=[arrow box,draw,minimum size=.5cm,arrow box
+arrows={east:.25cm, west:0.25cm}]
+\begin{scope}[start chain=1 going right,node distance=-0.15mm]
+    \node [on chain=1,tmtape] {$(\Delta,0)$};
+    \node [on chain=1,tmtape] {$\underline{(a,0)}$};
+    \node [on chain=1,tmtape] {$(b,0)$};
+    \node [on chain=1,tmtape] {$(c,1)$};
+    \node [on chain=1,tmtape] {$(\Delta,0)$};
+    \node [on chain=1] {Operácia R - pokým napravo od hlavy nie je poznačený symbol};
+\end{scope}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\edef\sizetape{0.7cm}
+\tikzstyle{tmtape}=[draw,minimum size=\sizetape]
+\tikzstyle{tmhead}=[arrow box,draw,minimum size=.5cm,arrow box
+arrows={east:.25cm, west:0.25cm}]
+\begin{scope}[start chain=1 going right,node distance=-0.15mm]
+    \node [on chain=1,tmtape] {$(\Delta,0)$};
+    \node [on chain=1,tmtape] {$(a,0)$};
+    \node [on chain=1,tmtape] {$\underline{(b,0)}$};
+    \node [on chain=1,tmtape] {$(c,1)$};
+    \node [on chain=1,tmtape] {$(\Delta,0)$};
+    \node [on chain=1] {Operácia R - pokým napravo od hlavy nie je poznačený symbol};
+\end{scope}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\edef\sizetape{0.7cm}
+\tikzstyle{tmtape}=[draw,minimum size=\sizetape]
+\tikzstyle{tmhead}=[arrow box,draw,minimum size=.5cm,arrow box
+arrows={east:.25cm, west:0.25cm}]
+\begin{scope}[start chain=1 going right,node distance=-0.15mm]
+    \node [on chain=1,tmtape] {$(\Delta,0)$};
+    \node [on chain=1,tmtape] {$(a,0)$};
+    \node [on chain=1,tmtape] {$\underline{(b,1)}$};
+    \node [on chain=1,tmtape] {$(c,1)$};
+    \node [on chain=1,tmtape] {$(\Delta,0)$};
+    \node [on chain=1] {Na pravo od hlavy je poznačený symbol, poznačíme aktuálny symbol};
+\end{scope}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\edef\sizetape{0.7cm}
+\tikzstyle{tmtape}=[draw,minimum size=\sizetape]
+\tikzstyle{tmhead}=[arrow box,draw,minimum size=.5cm,arrow box
+arrows={east:.25cm, west:0.25cm}]
+\begin{scope}[start chain=1 going right,node distance=-0.15mm]
+    \node [on chain=1,tmtape] {$(\Delta,0)$};
+    \node [on chain=1,tmtape] {$(a,0)$};
+    \node [on chain=1,tmtape] {$(b,1)$};
+    \node [on chain=1,tmtape] {$\underline{(c,1)}$};
+    \node [on chain=1,tmtape] {$(\Delta,0)$};
+    \node [on chain=1] {Skok doprava};
+\end{scope}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\edef\sizetape{0.7cm}
+\tikzstyle{tmtape}=[draw,minimum size=\sizetape]
+\tikzstyle{tmhead}=[arrow box,draw,minimum size=.5cm,arrow box
+arrows={east:.25cm, west:0.25cm}]
+\begin{scope}[start chain=1 going right,node distance=-0.15mm]
+    \node [on chain=1,tmtape] {$(\Delta,0)$};
+    \node [on chain=1,tmtape] {$(a,0)$};
+    \node [on chain=1,tmtape] {$(b,1)$};
+    \node [on chain=1,tmtape] {$\underline{(c,0)}$};
+    \node [on chain=1,tmtape] {$(\Delta,0)$};
+    \node [on chain=1] {Odznačíme};
+\end{scope}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\edef\sizetape{0.7cm}
+\tikzstyle{tmtape}=[draw,minimum size=\sizetape]
+\tikzstyle{tmhead}=[arrow box,draw,minimum size=.5cm,arrow box
+arrows={east:.25cm, west:0.25cm}]
+\begin{scope}[start chain=1 going right,node distance=-0.15mm]
+    \node [on chain=1,tmtape] {$\underline{(\Delta,0)}$};
+    \node [on chain=1,tmtape] {$(a,0)$};
+    \node [on chain=1,tmtape] {$(b,1)$};
+    \node [on chain=1,tmtape] {$(c,0)$};
+    \node [on chain=1,tmtape] {$(\Delta,0)$};
+    \node [on chain=1] {Operácia J};
+\end{scope}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\edef\sizetape{0.7cm}
+\tikzstyle{tmtape}=[draw,minimum size=\sizetape]
+\tikzstyle{tmhead}=[arrow box,draw,minimum size=.5cm,arrow box
+arrows={east:.25cm, west:0.25cm}]
+\begin{scope}[start chain=1 going right,node distance=-0.15mm]
+    \node [on chain=1,tmtape] {$(\Delta,0)$};
+    \node [on chain=1,tmtape] {$\underline{(a,0)}$};
+    \node [on chain=1,tmtape] {$(b,1)$};
+    \node [on chain=1,tmtape] {$(c,0)$};
+    \node [on chain=1,tmtape] {$(\Delta,0)$};
+    \node [on chain=1] {Skok doprava pokiaľ nebude pod hlavou označený symbol};
+\end{scope}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\edef\sizetape{0.7cm}
+\tikzstyle{tmtape}=[draw,minimum size=\sizetape]
+\tikzstyle{tmhead}=[arrow box,draw,minimum size=.5cm,arrow box
+arrows={east:.25cm, west:0.25cm}]
+\begin{scope}[start chain=1 going right,node distance=-0.15mm]
+    \node [on chain=1,tmtape] {$(\Delta,0)$};
+    \node [on chain=1,tmtape] {$(a,0)$};
+    \node [on chain=1,tmtape] {$\underline{(b,1)}$};
+    \node [on chain=1,tmtape] {$(c,0)$};
+    \node [on chain=1,tmtape] {$(\Delta,0)$};
+    \node [on chain=1] {Skok doprava pokiaľ nebude pod hlavou označený symbol};
+\end{scope}
+\end{tikzpicture}
+
+
+\begin{tikzpicture}
+\edef\sizetape{0.7cm}
+\tikzstyle{tmtape}=[draw,minimum size=\sizetape]
+\tikzstyle{tmhead}=[arrow box,draw,minimum size=.5cm,arrow box
+arrows={east:.25cm, west:0.25cm}]
+\begin{scope}[start chain=1 going right,node distance=-0.15mm]
+    \node [on chain=1,tmtape] {$(\Delta,0)$};
+    \node [on chain=1,tmtape] {$(a,0)$};
+    \node [on chain=1,tmtape] {$\underline{(b,0)}$};
+    \node [on chain=1,tmtape] {$(c,0)$};
+    \node [on chain=1,tmtape] {$(\Delta,0)$};
+    \node [on chain=1] {Odznačíme};
+\end{scope}
+\end{tikzpicture}
+
+
+\end{enumerate}
+\end{enumerate}
+\end{mysolution}
+
+\end{document}
+

@@ -1,0 +1,638 @@
+% Šáblona prevzatá od Mareka Milkoviča
+% https://github.com/metthal/TIN-Ulohy
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb,amsfonts}
+\usepackage[slovak]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{enumitem}
+\usepackage{ifthen}
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\usepackage{caption}
+\usepackage{background}
+\usepackage{float}
+
+\usetikzlibrary{arrows,automata,calc,positioning}
+
+\newcommand{\task}[2]{\par \noindent \textbf{{#1}.} \hspace{3pt} #2 \vspace{10pt}}
+\newcommand{\solution}{\vspace{10pt}}
+\newcommand{\pipesep}{\hspace{3pt} \vert \hspace{3pt}}
+
+\newenvironment{subtasklist}[0]{\begin{enumerate}[label=(\alph*)]}{\end{enumerate}}
+\newenvironment{mysolution}[1]{
+    \par \textbf{Riešenie} \newline
+    \ifthenelse{\equal{#1}{subtasks}}{\begin{enumerate}[label=(\alph*)]}
+            {\begin{enumerate}[label={}] \item}
+}{\end{enumerate} \newpage}
+\newcommand{\subtask}{\item}
+
+\SetBgContents{
+        \parbox{0.4\textwidth}{
+            \raggedleft
+                Dávid Mikuš\\
+                \texttt{xmikus15}
+        }
+}
+\SetBgScale{0.75}
+\SetBgOpacity{1}
+\SetBgAngle{0}
+\SetBgColor{black}
+\SetBgPosition{current page.north east}
+\SetBgVshift{-0.8cm}
+\SetBgHshift{-3.5cm}
+ 
+\begin{document}
+ 
+\title{TIN 2016/2017: Úloha 1}
+\author{Dávid Mikuš \\ \small\texttt{xmikus15@stud.fit.vutbr.cz}}
+\maketitle
+
+\task{1}{Uvažujte jazyk $L_{1} = \{a^{i}b^{j}c^{k} \pipesep ( i \ne k ) \lor (j=2l, l \ge 0)\}$.
+    \begin{subtasklist}
+            \subtask Zostavte gramatiku $G_{1}$ takú, že $L(G_{1}) = L_{1}$.
+            \subtask Akého typu (podľa Chomského hierachie jazykov) je $G_{1}$ a akého typu
+            je $L_{1}$? Môžu sa tieto typy všeobecne líšiť? Svoje tvrdenie zdôvodnite
+            (formálny dôkaz nie je požadovaný).
+    \end{subtasklist}}
+
+\begin{mysolution}{subtasks}
+\vspace{-15pt}
+\subtask % (a)
+\begin{flalign*}
+    G_{1} = (&N, \Sigma, P, S) &\\[5pt]
+    N &= \{S, A, B, D, E, F, G\} &\\
+    \Sigma &= \{a, b, c\} &\\
+    P&: \\
+    &S \to D C c \pipesep a E \pipesep A F C &\\
+    &A \to a A \pipesep \varepsilon &\\
+    &B \to b B \pipesep \varepsilon &\\
+    &C \to c C \pipesep \varepsilon &\\
+    &D \to a D c \pipesep B \pipesep \varepsilon &\\
+    &E \to a E G \pipesep B \pipesep \varepsilon &\\
+    &F \to b b F \pipesep \varepsilon &\\
+    &G \to c \pipesep \varepsilon &
+\end{flalign*}
+
+\subtask % (b)
+Gramatika $G_{1}$ je typu 2 pretože obsahuje pravidlá tvaru $A \to \alpha$ kde $A \in N$ a $\alpha \in (N \cup \Sigma)^{*}$. Typu 3 už nemôže byť pretože pravidlá porušuju tvar $A \to xB \pipesep x$ kde $A,B \in N$ a $x \in \Sigma^{*}$
+\\
+Jazyk $L_{1}$ je typu 2, pretože už nemôže byť typom 3 (regulárny jazyk). \\
+Tieto typy sa môžu všeobecne líšiť. Gramatika môže mať rovnaký typ ako jazyk alebo byť vyššieho typu v porovnaní s jazykom ktorý generuje. Napríklad bezkontextová gramatika (Typ 2) môže generovať regulárny jazyk (Typ 3).
+
+\end{mysolution}
+
+\task{2}{Uvažujte regulárny výraz $r_{2} = (a + b + \varepsilon)^{*}(ab)^{*}$.
+    \begin{subtasklist}
+        \subtask Preveďte $r_{2}$ algoritmicky na redukovaný deterministický konečný automat
+        $M_{2}$ (tj. RV~$\to$ RKA $\to$ DKA $\to$ redukovaný DKA), prijímajúci jazyk
+        popísaný výrazom $r_{2}$.
+        \subtask Pre jazyk $L(M_{2})$ určte počet tried ekvivalencie relácie $\sim_{L}$
+        (viz. Myhill-Nerodova veta) a vypíšte tieto triedy. Jednotlivé triedy môžete popísať
+        napríklad konečným automatom, ktorý akceptuje všetky slová patriace do danej triedy.
+    \end{subtasklist}
+}
+
+\begin{mysolution}{subtasks}
+\vspace{-15pt}
+\subtask % (a)
+Použijeme algoritmus 3.7 zo študijnej opory. Najskôr rozložíme $r_{2}$ na primitívne zložky a rozklad vyjadríme stromom.
+
+ \begin{figure}[!h]
+        \centering
+        \begin{tikzpicture}[level 1/.style={sibling distance = 3.75cm}, level 2/.style={sibling distance = 1.5cm}]
+            \node {$r_{2}$}
+            	child
+            	{
+            		node {$r_{A}$} edge from parent
+            			child
+            			{
+            				node {$r_{C}$} edge from parent
+            					child { node {$($} edge from parent }
+            					child
+            					{
+            						node {$r_{E}$} edge from parent
+            							child
+            							{
+            								node {$r_{G}$} edge from parent
+            									child
+            									{
+            										node {$r_{K}$} edge from parent
+            											child { node {$a$} edge from parent }
+            									}
+            									child { node {$+$} edge from parent }
+            									child
+            									{
+            										node {$r_{L}$} edge from parent
+            											child { node {$b$} edge from parent }
+            									}
+            							}
+            							child { node {$+$} edge from parent }
+            							child
+            							{
+            								node {$r_{H}$} edge from parent
+            									child { node {$\varepsilon$} edge from parent }
+            							};
+            					}
+            					child { node {$)$} edge from parent };
+            			}                      
+            			child { node {$\ast$} edge from parent };
+            	}
+            	child { node {\LARGE$\cdot$} edge from parent }
+            	child
+            	{
+            		node {$r_{B}$} edge from parent
+            			child
+            			{
+            				node {$r_{D}$} edge from parent
+            					child { node {$($} edge from parent }
+            					child
+            					{
+            						node {$r_{F}$} edge from parent
+            							child
+            							{
+            								node {$r_{I}$} edge from parent
+            									child { node {$a$} edge from parent }
+            							}			
+            					child { node {\LARGE$\cdot$} edge from parent }
+            					child {
+            						node {$r_{J}$} edge from parent
+            							child { node {$b$} edge from parent }
+            				}
+            		}
+            		child { node {$)$} edge from parent };
+            			}
+            			child { node {$\ast$} edge from parent }
+            	};
+        \end{tikzpicture}
+        \caption{Rozklad regulárneho výrazu $r_{2}$.}
+    \end{figure}
+    
+Následne zostrojíme ku každému regulárnemu výrazu príslušny konečny automat.
+
+	\begin{figure}[!h]
+        \centering
+        \begin{minipage}[b]{0.45\textwidth}
+            \centering
+            \captionsetup{justification=centering}
+            \begin{tikzpicture}[node distance = 3cm, ->, >=stealth, line width=1pt]
+                \node[state, initial, initial text=] (s) {};
+                \node[state, accepting, right of = s] (f) {};
+
+                \path (s) edge node[above]{$\varepsilon$} (f);
+            \end{tikzpicture}
+            \caption{RKA $M_{H}$ ekvivalentný\\RV $r_{H}$.}
+        \end{minipage}
+        \begin{minipage}[b]{0.45\textwidth}
+            \centering
+            \captionsetup{justification=centering}
+            \begin{tikzpicture}[node distance = 3cm, ->, >=stealth, line width=1pt]
+                \node[state, initial, initial text=] (s) {};
+                \node[state, accepting, right of = s] (f) {};
+
+                \path (s) edge node[above]{$a$} (f);
+            \end{tikzpicture}
+            \caption{RKA $M_{I}, M_{K}$ ekvivalentný\\RV $r_{I}, r_{K}$.}
+        \end{minipage}
+    \end{figure}
+    
+    \begin{figure}[!h]
+        \centering
+        \begin{tikzpicture}[node distance = 3cm, ->, >=stealth, line width=1pt]
+          		 \node[state, initial, initial text=] (s) {};
+                \node[state, accepting, right of = s] (f) {};
+
+                \path (s) edge node[above]{$b$} (f);
+        \end{tikzpicture}
+        \caption{RKA $M_{J}, M_{L}$ ekvivalentný RV $r_{J}, r_{L}$.}
+    \end{figure}
+    
+    \begin{figure}[!h]
+        \centering
+        \begin{tikzpicture}[node distance = 2.5cm, ->, >=stealth, line width=1pt, scale=0.8, every node/.style={transform shape}]
+            \node[state, initial, initial text=] (sy) {};
+            \node[state, above right = 0.5cm and 1.7cm of sy] (sa) {};
+            \node[state, right of = sa] (fa) {};
+            \node[state, below right = 0.5cm and 1.7cm of sy] (sb) {};
+            \node[state, right of = sb] (fe) {};
+            \node[state, accepting, right = 6.5cm of sy] (fy) {};
+
+            \path (sy) edge node[above]{$\varepsilon$} (sa);
+            \path (sy) edge node[below]{$\varepsilon$} (sb);
+            \path (sa) edge node[above]{$a$} (fa);
+            \path (sb) edge node[above]{$b$} (fe);
+            \path (fa) edge node[above]{$\varepsilon$} (fy);
+            \path (fe) edge node[below]{$\varepsilon$} (fy);
+        \end{tikzpicture}
+        \caption{RKA $M_{G}$ ekvivalentný RV $r_{G}$.}
+    \end{figure}
+    
+    \begin{figure}[!h]
+        \centering
+        \begin{tikzpicture}[node distance = 2.5cm, ->, >=stealth, line width=1pt, scale=0.8, every node/.style={transform shape}]
+        	\node[state, initial, initial text=] (se) {};
+            \node[state, above right = 0.5cm and 1.7cm of se] (sg) {};
+            \node[state, above right = 0.5cm and 1.7cm of sg] (si) {};
+            \node[state, right of = si] (fi) {};
+            \node[state, below right = 0.5cm and 1.7cm of sg] (sb) {};
+            \node[state, right of = sb] (fe) {};
+            \node[state, right = 6.5cm of sg] (fy) {};
+            \node[state, below = 3cm of si] (h) {};
+            \node[state, right of = h] (fh) {};
+           	\node[state, accepting, below right = 0.5cm and 1.7cm of fy] (fg) {};
+
+			\path (se) edge node[above]{$\varepsilon$} (sg);
+            \path (sg) edge node[above]{$\varepsilon$} (si);
+            \path (sg) edge node[below]{$\varepsilon$} (sb);
+            \path (si) edge node[above]{$a$} (fi);
+            \path (sb) edge node[above]{$b$} (fe);
+            \path (fi) edge node[above]{$\varepsilon$} (fy);
+            \path (fe) edge node[below]{$\varepsilon$} (fy);
+            \path (se) edge node[above]{$\varepsilon$} (h);
+            \path (h) edge node[above]{$\varepsilon$} (fh);
+            \path (fy) edge node[above]{$\varepsilon$} (fg);
+            \path (fh) edge node[above]{$\varepsilon$} (fg);
+        \end{tikzpicture}
+        \caption{RKA $M_{E}, M_{C}$ ekvivalentný RV $r_{E}, r_{C}$.}
+    \end{figure}
+    
+    \begin{figure}[!h]
+        \centering
+        \begin{tikzpicture}[node distance = 2cm, ->, >=stealth, line width=1pt]
+            \node[state, initial, initial text=] (sa) {};
+            \node[state, right of = sa] (fa) {};
+            \node[state, accepting, right of = fa] (fb) {};
+
+            \path (sa) edge node[above]{$a$} (fa);
+            \path (fa) edge node[above]{$b$} (fb);
+        \end{tikzpicture}
+        \caption{RKA $M_{F}, M_{D}$ ekvivalentný RV $r_{F}, r_{D}$.}
+    \end{figure}
+    
+    \begin{figure}[!h]
+        \centering
+        \begin{tikzpicture}[node distance = 2cm, ->, >=stealth, line width=1pt]
+        	\node[state, initial, initial text=] (mb) {};
+            \node[state, right of = mb] (sa) {};
+            \node[state, right of = sa] (fa) {};
+            \node[state, right of = fa] (fb) {};
+            \node[state, accepting, right of = fb] (nb) {};
+
+			\path (mb) edge node[above]{$\varepsilon$} (sa);
+            \path (sa) edge node[above]{$a$} (fa);
+            \path (fa) edge node[above]{$b$} (fb);
+            \path (fb) edge node[above]{$\varepsilon$} (nb);
+            \path (fb) edge[bend right=40] node[above]{$\varepsilon$} (sa);
+            \path (mb) edge[bend right=40] node[below]{$\varepsilon$} (nb);
+            
+        \end{tikzpicture}
+        \caption{RKA $M_{B}$, ekvivalentný RV $r_{B}$.}
+    \end{figure}
+    
+    
+    \begin{figure}[!h]
+        \centering
+        \begin{tikzpicture}[node distance = 2.5cm, ->, >=stealth, line width=1pt, scale=0.8, every node/.style={transform shape}]
+        	\node[state, initial, initial text=] (ma) {};
+        	\node[state, right of = ma] (se) {};
+            \node[state, above right = 0.5cm and 1.7cm of se] (sg) {};
+            \node[state, above right = 0.5cm and 1.7cm of sg] (si) {};
+            \node[state, right of = si] (fi) {};
+            \node[state, below right = 0.5cm and 1.7cm of sg] (sb) {};
+            \node[state, right of = sb] (fe) {};
+            \node[state, right = 6.5cm of sg] (fy) {};
+            \node[state, below = 3cm of si] (h) {};
+            \node[state, right of = h] (fh) {};
+           	\node[state, below right = 0.5cm and 1.7cm of fy] (fg) {};
+           	\node[state, accepting, right of = fg] (ng) {};
+			
+			\path (ma) edge[bend left=80] node[above]{$\varepsilon$} (ng);
+			\path (ma) edge node[above]{$\varepsilon$} (se);
+			\path (se) edge node[above]{$\varepsilon$} (sg);
+            \path (sg) edge node[above]{$\varepsilon$} (si);
+            \path (sg) edge node[below]{$\varepsilon$} (sb);
+            \path (si) edge node[above]{$a$} (fi);
+            \path (sb) edge node[above]{$b$} (fe);
+            \path (fi) edge node[above]{$\varepsilon$} (fy);
+            \path (fe) edge node[below]{$\varepsilon$} (fy);
+            \path (se) edge node[above]{$\varepsilon$} (h);
+            \path (h) edge node[above]{$\varepsilon$} (fh);
+            \path (fy) edge node[above]{$\varepsilon$} (fg);
+            \path (fh) edge node[above]{$\varepsilon$} (fg);
+            \path (fg) edge node[above]{$\varepsilon$} (ng);
+            \path (fg) edge[bend right=70] node[below]{$\varepsilon$} (se);
+            
+        \end{tikzpicture}
+        \caption{RKA $M_{A}$ ekvivalentný RV $r_{A}$.}
+    \end{figure}
+    
+    \begin{figure}[!h]
+        \centering
+        \begin{tikzpicture}[node distance = 2.5cm, ->, >=stealth, line width=1pt, scale=0.8, every node/.style={transform shape}]
+        	\node[state, initial, initial text=] (ma) {$1$};
+        	\node[state, right of = ma] (se) {$2$};
+            \node[state, above right = 0.5cm and 1.7cm of se] (sg) {$3$};
+            \node[state, above right = 0.5cm and 1.7cm of sg] (si) {$4$};
+            \node[state, right of = si] (fi) {$5$};
+            \node[state, below right = 0.5cm and 1.7cm of sg] (sb) {$6$};
+            \node[state, right of = sb] (fe) {$7$};
+            \node[state, right = 6.5cm of sg] (fy) {$8$};
+            \node[state, below = 3cm of si] (h) {$9$};
+            \node[state, right of = h] (fh) {$10$};
+           	\node[state, below right = 0.5cm and 1.7cm of fy] (fg) {$11$};
+			
+			 \node[state, below = 4cm of sa] (mb) {$12$};
+            \node[state, right of = mb] (sa) {$13$};
+            \node[state, right of = sa] (fa) {$14$};
+            \node[state, right of = fa] (fb) {$15$};
+            \node[state, accepting, right of = fb] (nb) {$16$};
+            
+			\path (ma) edge[bend right=5] node[below]{$\varepsilon$} (mb);
+			\path (ma) edge node[above]{$\varepsilon$} (se);
+			\path (se) edge node[above]{$\varepsilon$} (sg);
+            \path (sg) edge node[above]{$\varepsilon$} (si);
+            \path (sg) edge node[below]{$\varepsilon$} (sb);
+            \path (si) edge node[above]{$a$} (fi);
+            \path (sb) edge node[above]{$b$} (fe);
+            \path (fi) edge node[above]{$\varepsilon$} (fy);
+            \path (fe) edge node[below]{$\varepsilon$} (fy);
+            \path (se) edge node[above]{$\varepsilon$} (h);
+            \path (h) edge node[above]{$\varepsilon$} (fh);
+            \path (fy) edge node[above]{$\varepsilon$} (fg);
+            \path (fh) edge node[above]{$\varepsilon$} (fg);
+            \path (fg) edge[bend right=70] node[below]{$\varepsilon$} (se);
+            
+           
+
+			\path (mb) edge node[above]{$\varepsilon$} (sa);
+            \path (sa) edge node[above]{$a$} (fa);
+            \path (fa) edge node[above]{$b$} (fb);
+            \path (fb) edge node[above]{$\varepsilon$} (nb);
+            \path (fb) edge[bend right=40] node[above]{$\varepsilon$} (sa);
+            \path (mb) edge[bend right=40] node[below]{$\varepsilon$} (nb);
+            
+            \path (fg) edge[bend left=5] node[below]{$\varepsilon$} (mb);
+        \end{tikzpicture}
+        \caption{RKA $M_{2}$ ekvivalentný RV $r_{2}$.}
+    \end{figure}
+
+\clearpage
+Podľa algoritmu 3.6 prevedieme RKA $M_{2}$ na DKA $M_{D} = (Q_{D}, \Sigma, \delta_{D}, q^{0}_{D}, F_{D})$.
+
+\begin{flalign*}
+        &q^{0}_{D} = \varepsilon\text{-uzáver}(1)
+            = \{1, 2, 3, 4, 6, 9, 10, 11, 12, 13, 16\} = A & \\
+                                                             & \\
+        &\delta_{D}(A, a) = \varepsilon\text{-uzáver}(\{5, 14\})
+            = \{2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 16\} = B & \\
+        &\delta_{D}(A, b) = \varepsilon\text{-uzáver}(\{7\})
+        	= \{2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 16\} = C & \\
+        &\delta_{D}(B, a) = \varepsilon\text{-uzáver}(\{5, 14\})
+            = B & \\
+       &\delta_{D}(B, b) = \varepsilon\text{-uzáver}(\{7, 15\})
+       		= \{2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 15, 16\} = D & \\
+       &\delta_{D}(C, a) = \varepsilon\text{-uzáver}(\{5, 14\})
+             = B & \\
+       &\delta_{D}(C, b) = \varepsilon\text{-uzáver}(\{7\})
+            = C & \\
+       &\delta_{D}(D, a) = \varepsilon\text{-uzáver}(\{5, 14\})
+            = B & \\
+        &\delta_{D}(D, b) = \varepsilon\text{-uzáver}(\{7\}) = C & \\
+        & \\
+        &Q_{D} = \{A, B, C, D\} & \\
+        &F_{D} = \{A, B, C, D\}
+    \end{flalign*}
+    
+
+    \begin{figure}[!h]
+        \centering
+        \begin{tikzpicture}[node distance = 2.2cm, ->, >=stealth, line width=1pt]
+            \node[state, accepting, initial, initial text=] (a) {$A$};
+            \node[state, accepting, right of = a] (b) {$B$};
+            \node[state, accepting, below of = a] (c) {$C$};
+            \node[state, accepting, right of = c] (d) {$D$};
+          
+            \path (a) edge node[above]{$a$} (b);
+            \path (a) edge node[left]{$b$} (c);
+            \path (b) edge[loop right] node[right]{$a$} (b);
+            \path (b) edge[bend right=20] node[left]{$b$} (d);
+            \path (c) edge node[left]{$a$} (b);
+            \path (c) edge[loop left] node[left]{$b$} (c);
+            \path (d) edge[bend right=20] node[right]{$a$} (b);
+            \path (d) edge node[above]{$b$} (c);
+           
+        \end{tikzpicture}
+        \caption{DKA $M_{D}$.}
+    \end{figure}
+
+Pomocou algoritmu 3.5 vykonáme prevod z DKA na redukovaný DKA.
+
+\begin{figure}[!h]
+        \begin{minipage}[b]{0.45\textwidth}
+            \begin{center}
+                \begin{tabular}{c  c | c  c}
+                    $\overset{0}{\equiv}$ & $\delta_{U}$ & $a$ & $b$ \\
+                    \hline
+                    $I:$   & $A$ & $B_{I}$ & $C_{I}$ \\
+                           & $B$ & $B_{I}$ & $D_{I}$ \\
+                           & $C$ & $B_{I}$ & $C_{I}$ \\
+                           & $D$ & $B_{I}$ & $C_{I}$ \\
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{minipage}
+        \begin{minipage}[b]{0.45\textwidth}
+            \begin{flalign*}
+                &\overset{0}{\equiv}\ = \{ \{A, B, C, D\} \}& \\
+            \end{flalign*}
+        \end{minipage}
+    \end{figure}
+    
+    \begin{figure}[H]
+    	\centering
+        \begin{tikzpicture}[node distance = 2.2cm, ->, >=stealth, line width=1pt]
+            \node[state, accepting, initial, initial text=] (a) {$I$};
+           	\path (a) edge[loop] node[above]{$a, b$} (a);
+           
+        \end{tikzpicture}
+        \caption{Redukovaný DKA}
+    \end{figure}
+    
+\vspace{-15pt}
+\subtask % (b)
+Počet tried ekvivalencie relácie $\sim_{L}$ je len jedná jediná a to $L^{-1}([I]) = (a+b)^{*}$.
+\begin{figure}[ht]
+        \centering
+        \begin{tikzpicture}[node distance = 2.5cm, ->, >=stealth, line width=1pt]
+            \node[state, initial, initial text=, accepting] (f) {$[I]$};
+			\path (a) edge[loop] node[above]{$a, b$} (a);
+        \end{tikzpicture}
+        \caption{KA príjmajúci jazyk $L^{-1}([I]) = (a+b)^{*}$.}
+    \end{figure}
+    
+\end{mysolution}
+
+
+\clearpage
+\task{3}{Uvažujte NKA $M_{3}$ nad abecedou $\Sigma = \{a, b, c\}$ z obrázku \ref{KA3}: \\
+    \begin{figure}[!h]
+        \centering
+        \begin{tikzpicture}[node distance = 3cm, ->, >=stealth, line width=1pt]
+            \node[state, initial, initial text=] (X) {};
+            \node[state, right of = X] (Y) {};
+            \node[state, accepting, right of = Y] (Z) {};
+
+            \path (X) edge node[above]{a} (Y);
+            \path (Y) edge node[above]{b} (Z);
+            \path (Y) edge[loop above] node[above]{c} (Y);
+            \path (X) edge[bend right=40] node[below]{c} (Y);
+            \path (Z) edge[bend left=60] node[above]{b} (X);
+            \path (Z) edge[bend right=50] node[above]{a} (Y);
+        \end{tikzpicture}
+    \caption{NKA $M_{3}$}
+    \label{KA3}
+    \end{figure}
+
+    K tomuto automatu zostrojte sústavu rovníc nad regulárnymi výrazmi a jej riešením zostavte
+ekvivalentný regulárny výraz.}
+
+\begin{mysolution}
+
+Označíme si jednotlive stavy KA z ľava doprava písmenami $X, Y \text{a } Z$ a zostrojíme sústavu rovníc.
+\begin{flalign}
+    X =&\ aY + cY & \\
+    Y =&\ cY + bZ & \\
+    Z =&\ bX + aY + \varepsilon &
+\end{flalign}
+
+Z výrazu $X$ vytkneme $Y$ a na výraz $Y$ použijeme vetu 3.14, ktorá hovorí že najmenším pevným bodom rovnice $X = pX + q$ je $X = p^{*}q$.
+
+\begin{flalign}
+    X =&\ (a + c)Y & \\
+    Y =&\ c^{*}bZ & 
+\end{flalign}
+Výraz $Y$ dosadíme do výrazov $X$ a $Z$.
+
+\begin{flalign}
+    X =&\ (a + c)c^{*}bZ & \\
+    Z =&\ bX + ac^{*}bZ + \varepsilon &  \\
+      =&\ (ac^{*}b)^{*}(bX + \varepsilon) &
+\end{flalign}
+Následne výraz $Z$ dosadíme do $X$ a upravujeme.
+
+\begin{flalign}
+    X =&\ (a + c)c^{*}b(ac^{*}b)^{*}(bX + \varepsilon) & \\
+    	=&\ (a + c)c^{*}b(ac^{*}b)^{*}bX + (a + c)c^{*}b(ac^{*}b)^{*} & \\
+    	=&\ ((a + c)c^{*}b(ac^{*}b)^{*}b)^{*}(a + c)c^{*}b(ac^{*}b)^{*} &
+\end{flalign}
+
+Výraz $X$ je ekvivalentný regulárny výraz k automatu $M_{3}$
+
+\end{mysolution}
+
+\task{4}{
+Majme jazyk $L_{1} \subseteq \{a, b, c\}^{*}$ a jazyk $L_{2} \subseteq \{0, 1\}^{*}$ a
+funkciu $bin : \{a, b, c\}^{*} \to \{0, 1\}$ definovanú následovne:
+\begin{itemize}
+	\item $bin(\varepsilon) = \varepsilon, bin(a) = 00, bin(b) = 01$ a $bin(c) = 11$.
+	\item Pre $|w| > 1 $ platí: $(w = xw' \land |x| = 1) \Rightarrow bin(w) = bin(x)bin(w')$
+\end{itemize}
+Navrhnite a formálne popíšte algoritmus, ktorý má na vstupe dva konečné automaty $M_{1} = (Q_{1}, \{a, b, c\}, \delta_{1}, q^{0}_{1}, F_{1})$ a $M_{2} = (Q_{2}, \{0, 1\}, \delta_{2}, q^{0}_{2}, F_{1})$ (môžu byť nedeterministické), a jeho výstupom bude konečný automat $M_{f}$ taký, že $L(M_{f}) = \{w | w \in L(M_{1}) \land bin(w) \in L(M_{2})\}$.
+}
+\begin{mysolution}
+
+    \vspace{-35pt}
+    \begin{flalign*}
+        &M_{f} = (Q_{f}, \Sigma_{f}, \delta_{f}, q^{0}_{f}, F_{f}) & \\
+        & \\
+        &Q_{f} = Q_{1} \times Q_{2} & \\
+        &\Sigma_{f} = \{a, b, c\} & \\
+        &\delta_{f} :
+                \forall q_{1}, q_{2} \in Q_{1} \forall q_{3}, q_{4}, q_{5} \in Q_{2} \forall x \in \Sigma_{f} : & \\
+                    &\hspace{140pt} (q_{2}, q_{5}) \in \delta_{f}((q_{1}, q_{3}), x)  & \\
+                    &\hspace{180pt} \Longleftrightarrow & \\
+                    &\hspace{100pt} (q_{2} \in \delta_{1}(q_{1}, a) \land q_{4} \in \delta_{2}(q_{3}, 0) \land q_{5} \in \delta_{2}(q_{4}, 0)) &\\
+                    &\hspace{200pt} \lor & \\
+                     &\hspace{100pt} (q_{2} \in \delta_{1}(q_{1}, b) \land q_{4} \in \delta_{2}(q_{3}, 0) \land q_{5} \in \delta_{2}(q_{4}, 1)) &\\
+                    &\hspace{200pt} \lor & \\
+                     &\hspace{100pt} (q_{2} \in \delta_{1}(q_{1}, c) \land q_{4} \in \delta_{2}(q_{3}, 1) \land q_{5} \in \delta_{2}(q_{4}, 1)) &\\
+        & \\
+        &q^{0}_{f} = (q^{0}_{1}, q^{0}_{2}) & \\
+        &F_{f} = F_{1} \times F_{2}
+    \end{flalign*}
+
+\end{mysolution}
+
+\task{5}{
+Majme jazyk $L = \{a^{i}b^{j}c^{k} | i > k \land j \geq 1\}$. Je jazyk $L$ regulárny? Dokážte alebo vyvráťte.
+}
+\begin{mysolution}
+ PPredpokladajme, že jazyk $L$ je regulárny jazyk.
+    Potom platí, že
+    \begin{align*}
+        \exists k > 0 : \forall w \in L :
+        \vert w \vert \ge k \Rightarrow
+        \exists x,y,z \in \Sigma^{*} :&\ w = xyz\ \land \\
+                                      &\ y \ne \varepsilon\ \land \\
+                                      &\ \vert xy \vert \le k\ \land \\
+                                      &\ \forall i \ge 0 : xy^{i}z \in L\
+    \end{align*}
+    Zvolíme si reťazec $w$:
+    \begin{align*}
+    	w =&\ a^{k}bc^{k-1}, w \in L & \\
+     	|w| =&\ 2k \ge k &
+    \end{align*}
+    
+    Reťazec $xy^{i}z \in L$ \\
+    \begin{align*}
+    	\exists x,y,z \in \Sigma^{*} : |xy| \le k \\
+   	 	x = a^{l_1}, y = a^{l_2}, \#_{a}(z) = l_{3} \\ 
+   	 	l_{1}, l_{2} > 0, l_{3} \ge 0 \\
+    	\#_{a}(w) = l_{1} + l_{2} + l_{3} = k \\
+    \end{align*}
+    Kedže $l_{3} \ge 0$ tak potom $l_{1} + l_{2} \le k$ \\
+    Zvolíme si $i = 0$
+    \begin{align*}
+    	xy^{0}z =&\ xz = a^{l_1}a^{l_3}bc^{k-1} & \\
+    	|a^{l_1}a^{l_3}| =&\ k - l_{2}, |c^{k-1}| = k - 1 &
+    \end{align*}
+    	Zo zadania by malo platiť že $\#_{a}(w) > \#_{c}(w)$
+    \begin{align*}
+    	\#_{a}(xy^{0}z) =&\ l_{1} + l_{3} & \\
+    	\#_{c}(xy^{0}z) =&\ k - 1 & \\
+    	l_{1} + l_{3} >&\ k - 1 & \\
+    	k - l_{2} >&\ k - 1 \qquad l_{2} > 0 & \\
+    	l_{2} <&\ 1 &
+    \end{align*}
+    Kedže nám vyšlo $l_{2} < 1 \land l_{2} > 0$ pričom $l_{2} \in N$, tak takéto $l_{2}$ neexistuje, takže
+    $xy^{0}z \notin L$, došli sme k sporu. Tým pádom naš predpoklad neplatí a jazyk L nie je regulárny jazyk.
+\end{mysolution}
+
+\task{6}{
+Dokážte, že pre každý regulárny jazyk existuje jednoznačná gramatika (definícia jednoznačnej gramatiky -- viz slidy 4, strana 11).
+}
+\begin{mysolution}
+
+\begin{enumerate}
+	\item Každý regulárny jazyk $L$ sa dá špecifikovať pomocou konečneho automatu $M$ tak že $L(M) = L$. Veta 3.6
+	\item Konečný automat $M$ sa dá previesť na regulárnu gramatiku G, tak že $L(G) = L(M)$. Veta 3.7
+	\item
+		\begin{enumerate}
+			\item Predpokladajme že gramatika $G$ je viacznačná. $G = (Q_{G}, \Sigma_{G}, P, q_{G}^{0})$
+			\item \label{def} Podľa definície 4.5 je gramatika $G$ viacznačná ak generuje aspoň jednu viacznačnú vetu $w$. Veta $w$ je generovaná gramatikou $G$ ku ktorej existujú aspoň 2 rôzne derivačné stromy s koncovými uzlami tvoriacu vetu $w$.
+			\item \label{gn} Z dôkazu pre vetu 3.7 vieme že KA M sa dá previesť na DKA N. $N = (Q_{N}, \Sigma_{N}, \delta_{N}, q_{N}^0, F_{N})$
+			\item Z \ref{def} teda platí $\forall r \in \Sigma_{G} \exists q \in Q_{G} \exists a \in \Sigma_{G} : |q \rightarrow ar| > 1$, potom platí $\exists q \in Q_{N} \exists a \in \Sigma_{N}: |\delta(q,a)| > 1$, čiže k odvodzovaciemu pravidlu gramatiky existuje ekvivalentný prechod v konečnom automate.
+			\item Kedže na základe \ref{gn} musí pre KA existovať viac ako jeden prechod pre určitý stav a symbol, tak dochádzame k sporu. Kedže na základe definície DKA, môže existovať maximálne jeden takýto prechod. $\forall q \in Q_{N} \forall a \in \Sigma_{N}: |\delta(q,a)| \leq 1$
+			\item Gramatika tedy neni viacznačná. Definícia 4.5 hovorí že ak gramatika neni viacznačná tak je potom jednoznačná.
+		\end{enumerate}
+	\item Gramatika G je jednoznačná. Takže pre každý regulárny jazyk existuje jednoznačná gramatika.
+\end{enumerate}
+
+\end{mysolution}
+
+\end{document}
+\grid
+\grid
+\grid

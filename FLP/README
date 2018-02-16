@@ -1,0 +1,3 @@
+Extra:
+ - automat vie pracovat aj s neciselnymi stavmi (stringy)
+ - pridany prepinac "-f" ktory funguje ako "-t" len je predtym vykonany algoritmus na odstranenie nedostupnych stavov

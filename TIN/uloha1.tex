@@ -1,0 +1,314 @@
+% Šáblona prevzatá od Mareka Milkoviča
+% https://github.com/metthal/TIN-Ulohy
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb,amsfonts}
+\usepackage[slovak]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{enumitem}
+\usepackage{ifthen}
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\usepackage{caption}
+\usepackage{background}
+\usepackage{float}
+
+\usetikzlibrary{arrows,automata,calc,positioning}
+
+\newcommand{\task}[2]{\par \noindent \textbf{{#1}.} \hspace{3pt} #2 \vspace{10pt}}
+\newcommand{\solution}{\vspace{10pt}}
+\newcommand{\pipesep}{\hspace{3pt} \vert \hspace{3pt}}
+
+\newenvironment{subtasklist}[0]{\begin{enumerate}[label=(\alph*)]}{\end{enumerate}}
+\newenvironment{mysolution}[1]{
+    \par \textbf{Riešenie} \newline
+    \ifthenelse{\equal{#1}{subtasks}}{\begin{enumerate}[label=(\alph*)]}
+            {\begin{enumerate}[label={}] \item}
+}{\end{enumerate} \newpage}
+\newcommand{\subtask}{\item}
+
+\SetBgContents{
+        \parbox{0.4\textwidth}{
+            \raggedleft
+                Dávid Mikuš\\
+                \texttt{xmikus15}
+        }
+}
+\SetBgScale{0.75}
+\SetBgOpacity{1}
+\SetBgAngle{0}
+\SetBgColor{black}
+\SetBgPosition{current page.north east}
+\SetBgVshift{-0.8cm}
+\SetBgHshift{-3.5cm}
+ 
+\begin{document}
+ 
+\title{TIN 2017/2018: Úloha 1}
+\author{Dávid Mikuš \\ \small\texttt{xmikus15@stud.fit.vutbr.cz}}
+\maketitle
+
+\task{1}{Nech $M_1 = (Q_1,\Sigma_1, \delta_1, \Gamma_1,q_1, Z_1, F_1)$ je zásobnikový automat a
+$M_2 = (Q_2,\Sigma_2, \delta_2 ,q_2, F_2)$ je nedeterministický konečný automat.
+
+Navrhnite a \textit{formálne popíšte} algoritmus ktorý má na vstupe automaty $M_1$ a $M_2$, a jeho
+výstupom bude zásobnikový automat $M_3$ taký že,
+\begin{center}
+$L(M_3) = \{w \pipesep w \in L(M_1) \land \exists w' \in L(M_2): |w| = |w'| \}$
+}
+\end{center}
+\begin{mysolution}
+
+  \vspace{-35pt}
+    \begin{flalign*}
+        &M_{3} = (Q, \Sigma, \delta, \Gamma, q_0, Z, F) & \\
+        & \\
+        &Q = Q_{1} \times Q_{2} & \\
+        &\Sigma = \Sigma_1 & \\
+        &\delta :
+                \forall q_{1}^1, q_{2}^1 \in Q_{1} \ \forall q_{1}^2, q_2^2 \in Q_{2} \ \forall a \in \Sigma_{1} \ \forall z \in \Gamma_1 \ \forall \chi \in \Gamma_1^* : & \\
+                    &\hspace{100pt} [\ ((q_2^1, q_2^2), \chi) \in \delta((q_1^1, q_1^2), a, z)  & \\
+                    &\hspace{160pt} \Longleftrightarrow & \\
+                    &\hspace{100pt}  \exists b \in \Sigma_2: ((q_2^1, \chi) \in \delta_{1}(q_1^1, a, z) \land q_2^2 \in \delta_{2}(q_1^2, b)\ ] &\\
+                    &\hspace{180pt} \cup & \\
+                     &\hspace{100pt} [\ ((q_2^1, q_2^2), \chi) \in \delta((q_1^1, q_1^2), \varepsilon, z)) &\\
+                    &\hspace{160pt} \Longleftrightarrow & \\
+                     &\hspace{100pt} ((q_2^1, \chi) \in \delta_{1}(q_1^1, \varepsilon, z) \land q_1^2 = q_2^2) \ ] &\\
+        & \\
+        &q_0 = (q_1, q_2) & \\
+        &\Gamma = \Gamma_1 \\
+        &Z = Z_1 \\
+        &F = F_{1} \times F_{2}
+    \end{flalign*}
+    
+\end{mysolution}
+
+\task{2}{Uvažujme binárne relácie nad jazyky $\circ$ definované následovne: $L_1 \circ L_2 = \overline{L_1} \cap \overline{L_2}$. S využitím uzáverovych vlastnosti dokážte, alebo vyvráte, nasledujúce vzťahy:
+\begin{enumerate}[label=(\alph*)]
+\item{$L_1, L_2 \in \mathcal{L}_3 \Rightarrow L_1 \circ L_2 \in \mathcal{L}_3$}
+\item{$L_1 \in \mathcal{L}_3, L_2 \in \mathcal{L}_2^D \Rightarrow L_1 \circ L_2 \in \mathcal{L}_2^D$}
+\item{$L_1 \in \mathcal{L}_3, L_2 \in \mathcal{L}_2 \Rightarrow L_1 \circ L_2 \in \mathcal{L}_2$}
+\end{enumerate}
+$\mathcal{L}_2^D$ značí triedu deterministických bezkontextových jazykov.
+}
+
+\begin{mysolution}
+
+\begin{enumerate}[label=(\alph*)]
+\item  Upravíme na tvar: $L_1, L_2 \in \mathcal{L}_3 \Rightarrow \overline{L_1} \cap \overline{L_2} \in \mathcal{L}_3$
+Podľa vety 3.7 vieme že trieda regulárnych jazykov tvorí množinovu Boolovu algebru. Z Boolovej algebry plynie uzavretosť voči doplnku a prieniku. \\
+Kedže $\overline{L_1}, \overline{L_2} \in \mathcal{L}_3 $ tak potom aj $\overline{L_1} \cap \overline{L_2} \in \mathcal{L}_3 $   \\
+Tento vzťah teda \textit{platí}.
+
+\item Upravíme na tvar: $L_1 \in \mathcal{L}_3, L_2 \in \mathcal{L}_2^D \Rightarrow \overline{L_1} \cap \overline{L_2} \in \mathcal{L}_2^D$
+Na zǎklade vety 3.7 trieda regulárnych jazykov tvorí množinovu algebru ktora je uzavretá voči doplnku, teda $ \overline{L_1} \in \mathcal{L}_3 $. Podľa definície 6.5 vieme ak $L = L(P)$ kde P je deterministicky zásobnikovy automat, tak $L$ sa nazýva deterministickým bezkontextovým jazykom. Kedže $L_2 \in \mathcal{L}_2^D$ tak pre tento jazyk existuje DZA ktorý ho generuje. \\
+Podľa vety 6.12 sú jazyky DZA uzavreté voči doplnku a prieniku s regulárnymi jazykmi.
+Čiže $\overline{L_2} \in \mathcal{L}_2^D$ a $ \overline{L_1} \in \mathcal{L}_3 $, tak aj ich prienik je uzavretý $\overline{L_1} \cap \overline{L_2} \in \mathcal{L}_3$. \\
+Tento vzťah teda \textit{platí}.
+
+\item Upravíme na tvar: $L_1 \in \mathcal{L}_3, L_2 \in \mathcal{L}_2 \Rightarrow \overline{L_1} \cap \overline{L_2} \in \mathcal{L}_2$. $L_2$ je teda z triedy bezkontextových jazykov a na základe vety 6.6 vieme že bezkontextový jazyk nie je uzavretý voči doplnku a prieniku. $\overline{L_2} \notin \mathcal{L}_2$. Regulárne jazyky sú uzavreté voči doplnku, teda $\overline{L_1} \in \mathcal{L}_3$. Zvolíme si $\overline{L_1} = \{a,b,c\}^* \in \mathcal{L}_3$  a $\overline{L_2} = \{a^nb^nc^n | n \geq 1 \} \notin \mathcal{L}_2$. $ \overline{L_1} \cap \overline{L_2} = \{a^nb^nc^n | n \geq 1 \} \notin \mathcal{L}_2 $ \\
+Našli sme protipríklad a teda tento vzťah \textit{neplatí}.
+
+\end{enumerate}
+\end{mysolution}
+
+
+\task{3}{Nech $\Sigma = \{a, b, c\}}$. Uvažujme jazyk $L$ nad abecedou $\Sigma \cup \{1, 2\}$ definovaný následovne: $L = \{w_11w_2 \pipesep w_1, w_2 \in \Sigma^*, \#_{a}(w_1) = \#_{c}(w_2)\} \cup
+\{w_12w_2 \pipesep w_1, w_2 \in \Sigma^*, \#_{b}(w_1) = \#_{c}(w_2)\}$
+Zostrojte deterministický zásobnikový automat $M_L$ taký, že $L(M_L) = L$.   
+\begin{mysolution}
+
+$M_L = (\{q_0,q_1,q_2,q_3\}, \{a, b, c, 1, 2\}, \{\#, a, b\}, \delta, q_0, \#, \{q_3\})$
+\begin{align*}
+\delta(q_0, a, \#) &= \{(q_0, a\#)\} &
+\delta(q_0, a, a) &= \{(q_0, aa)\} &
+\delta(q_0, a, b) &= \{(q_0, ab)\} \\
+\delta(q_0, b, \#) &= \{(q_0, b\#)\} &
+\delta(q_0, b, a) &= \{(q_0, ba)\} &
+\delta(q_0, b, b) &= \{(q_0, bb)\} \\
+\delta(q_0, c, \#) &= \{(q_0, \#)\} &
+\delta(q_0, c, a) &= \{(q_0, a)\} &
+\delta(q_0, c, b) &= \{(q_0, b)\} \\
+%
+\delta(q_0, 1, \#) &= \{(q_1, \#)\} &
+\delta(q_0, 1, a) &= \{(q_1, a)\} &
+\delta(q_0, 1, b) &= \{(q_1, b)\} \\
+\delta(q_0, 2, \#) &= \{(q_2, \#)\} &
+\delta(q_0, 2, a) &= \{(q_2, a)\} &
+\delta(q_0, 2, b) &= \{(q_2, b)\}
+\end{align*}
+\begin{align*}
+\delta(q_1, \varepsilon, b) &= \{(q_1, \varepsilon)\} &
+\delta(q_2, \varepsilon, a) &= \{(q_2, \varepsilon)\} \\
+\delta(q_1, c, a) &= \{(q_1, \varepsilon)\} &
+\delta(q_2, c, b) &= \{(q_2, \varepsilon)\} \\
+\delta(q_1, a, a) &= \{(q_1, a)\} &
+\delta(q_2, a, b) &= \{(q_2, b)\} \\
+\delta(q_1, b, a) &= \{(q_1, a)\} &
+\delta(q_2, b, b) &= \{(q_2, b)\} \\
+\delta(q_1, \varepsilon, \#) &= \{(q_3, \#)\} &
+\delta(q_2, \varepsilon, \#) &= \{(q_3, \#)\} \\
+%
+\delta(q_3, a, \#) &= \{(q_3, \#)\} &
+\delta(q_3, b, \#) &= \{(q_3, \#)\}
+\end{align*}
+
+ \begin{figure}[!h]
+        \centering
+        \begin{tikzpicture}[node distance = 3cm, ->, >=stealth, line width=1pt, auto]
+            \node[state, initial, initial text=\#] (qa) {$q_0$};
+            \node[state, above right of = qa] (qb) {$q_1$};
+            \node[state, below right of = qa] (qc) {$q_2$};
+            \node[state, accepting, below right of = qb] (qd) {$q_3$};
+            \path (qa) edge[in=200, out=270, looseness=10] node[left=0.3]{
+            $\begin{aligned}
+            a, \#&/a\# &
+           	a, a&/aa &
+           	a, b&/ab \\
+           	b, \#&/b\# &
+           	b, a&/ba &
+           	b, b&/bb \\
+           	c, \#&/\# &
+           	c, a&/a &
+           	c, b&/b
+            \end{aligned}$
+            } (qa);
+            \path (qa) edge[bend left=40] node[above=0.3]{
+            $\begin{aligned}
+            1, \#/\# \\
+            1,a/a \\
+            1,b/b
+            \end{aligned}$
+            } (qb);
+             \path (qa) edge[bend right=40] node[below=0.5]{
+            $\begin{aligned}
+            2, \#/\# \\
+            2,a/a \\
+            2,b/b
+            \end{aligned}$
+            } (qc);
+             \path (qb) edge[in=45, out=90, looseness=10] node[right=0.3]{
+            $\begin{aligned}
+            \varepsilon, b&/\varepsilon &
+            c,a&/\varepsilon \\
+            a,a&/a &
+            b,a&/a
+            \end{aligned}$
+            } (qb);
+             \path (qc) edge[in=0, out=270, looseness=5] node[right=0.3]{
+            $\begin{aligned}
+            \varepsilon, a&/\varepsilon &
+            c,b&/\varepsilon \\
+            b,b&/b &
+            a,b&/b
+            \end{aligned}$
+            } (qc);
+            \path (qb) edge node[above, sloped]{$\varepsilon, \#/\varepsilon$} (qd);
+            \path (qc) edge node[above, sloped]{$\varepsilon, \#/\varepsilon$} (qd);
+            \path (qd) edge[loop right] node[right]{
+            $\begin{aligned}
+          	a, \#&/\# \\
+          	b, \#&/\#
+            \end{aligned}$
+            } (qa);
+        \end{tikzpicture}
+        \caption{Deterministický zásobnikový automat $M_L$}
+    \end{figure}
+\end{mysolution}
+\task{4}{Dokážte, že jazyk L z predchádzajúceho príkladu není regulárny.
+}
+\begin{mysolution}
+ PPredpokladajme, že jazyk $L$ je regulárny jazyk.
+    Potom platí, že
+    \begin{align*}
+        \exists k > 0 : \forall w \in L :
+        \vert w \vert \ge k \Rightarrow
+        \exists x,y,z \in \Sigma^{*} :&\ w = xyz\ \land \\
+                                      &\ y \ne \varepsilon\ \land \\
+                                      &\ \vert xy \vert \le k\ \land \\
+                                      &\ \forall i \ge 0 : xy^{i}z \in L\
+    \end{align*}
+    Zvolíme si reťazec $w$:
+    \begin{align*}
+    	w =&\ a^{k}1c^{k}, w \in L & \\
+     	|w| =&\ 2k+1 \ge k &
+    \end{align*}
+    Kedžte platí 
+    $\ \vert xy \vert \le k$, tak reťazec $xy$ sa skladá výhradne so symbolov $a$. Môžeme zapísať
+    $xy^iz  = a^{k + (i - 1)|y|}1c^k$. Pre $i = 0$ teda platí $xy^0z = a^{k - |y|}1c^k$. Z toho vyplýva že
+    $\#_a( a^{k - |y|}1c^k) = \#_c( a^{k - |y|}1c^k)$. Zostavíme rovnicu $k - |y| = k$, čiže $-|y| = 0$ a to platí len pre $|y| = 0$ a kedže vieme že $ y \ne \varepsilon, |y| > 0$. Tak dochádzame k sporu. \\
+    Pôvodný predpoklad, že jazyk L je regulárny teda nie je
+platný. Jazyk L nie je regulárny
+\end{mysolution}
+
+\task{5}{Uvažujme jazyk $L_k$ definovaný následovne: $L_k = \{w_1 \# w_2 \pipesep w_1, w_2 \in \{0, 1, 2\}^*, \#_0(w_1) < \#_2(w_2) < \#_1(w_1)\}$. Dokažte, že $L_k$ nie je bezkontextový.
+}
+\begin{mysolution}
+NNech je	$L_k$ bezkontextový jazyk. Potom platí
+	\begin{align*}
+		\exists k > 0 : \forall z \in L_k :
+		\vert z \vert \ge k \Rightarrow
+		\exists u,v,w,x,y \in \Sigma^{*} :&\ z = uvwxy\ \land \\
+									  &\ vx \ne \varepsilon\ \land \\
+									  &\ \vert vwx \vert \le k\ \land \\
+									  &\ \forall i \ge 0 : uv^{i}wx^{i}y \in L_k\
+	\end{align*}
+	Nech reťazec $z = 0^{k-1}1^{k+1}\#2^{k}$. Určite platí $|z| \ge k$, lebo vieme, že
+	$|z| = 3k$. Nakoľko $|vwx| \le k$, tak môže nastať len istý počet možností toho, v akom
+	tvare je $vwx$. Tie sú:
+	\begin{enumerate}
+	\item $vwx$ sa skladá výhradne zo symbolov $0$
+	\item $vwx$ sa skladá na rozhraní symbolov $0,1$
+	\item $vwx$ sa skladá výhradne zo symbolov $1$
+	\item $vwx$ sa skladá zo symbolov $1,2$ a $\#$
+	\end{enumerate}
+	Prvý prípad môžeme prepísať na ekvivalentný tvar $0^{k-1+(i-1)|vx|}1^{k+1}\#2^{k}$. \\
+	Položme $i = 2$, teda musí platiť $k -1 +|vx| < k$. Kedže $ vx \ne \varepsilon, |vx| > 0 $ tak sme v tejto variante došli k sporu. \\
+	
+	V druhom prípade sa vo $v$ alebo $x$ bude nachádzať aspoň jeden symbol $1$, pre $i = 0$ teda aspon jeden symbol $1$ vypadne a počet symbolov sa zmení z $k + 1$ na $k$ a tu dochádzame k sporu pretože $k \nless k$. \\
+	
+	Tretí prípad podobne ako prvý môžeme prepísať na ekvivalentný tvar $0^{k-1}1^{k+1+(i-1)|vx|}\#2^{k}$. 
+	Položme $i = 0$, teda musí platiť $k < k + 1 - |vx|$. Kedže $ vx \ne \varepsilon, |vx| > 0 $ tak sme v tejto variante došli k sporu. \\	
+	
+	Vo štvrtom prípade, ak by sa vo $v$ alebo $x$ nachádzal symbol $\#$ tak dojdeme k sporu pre $i \neq 1$, kedže $\#$ sa nachádza v jazyku práve jeden krát. \\
+	Uvažujme všetky možnosti $vwx$ také že: 
+	$a = \#_1(vwx), b = \#_2(vwx), a \geq 0 \ b > 0$
+	\begin{enumerate}
+	\item $a > b$ - podobne ako v prípade 3 pre $i = 0$ dojdeme k sporu, pretože dôjde k narušeniu nerovnosti počtu $1$ a $2$
+	\item $a < b$ - pre $i > 1$ dôjdeme k sporu, pretože sa zvýši počet $2$
+	\item $a = b$ - pre $i = 0$ dôjdeme k sporu, pretože sa zníži počet $2$
+	\end{enumerate}
+	Nakoľko sme sa dostali v každom
+	prípade do sporu, tak aj pôvodné tvrdenie, že $L_k$ je bezkontextový jazyk nemôže platiť. Jazyk $L_k$ tým
+	pádom nie je bezkontextový.
+
+	
+\end{mysolution}
+
+\task{6}{
+Popíšte hlavnú ideu dôkazu, že pre každý regulárny jazyk existuje jednoznačná gramatika (definícia jednoznačnej gramatiky -- viz slidy 2, strana 11).
+}
+\begin{mysolution}
+
+\begin{enumerate}
+	\item Každý regulárny jazyk $L$ sa dá špecifikovať pomocou konečneho automatu $M$ tak že $L(M) = L$. Veta 3.6
+	\item Konečný automat $M$ sa dá previesť na regulárnu gramatiku G, tak že $L(G) = L(M)$. Veta 3.7
+	\item
+		\begin{enumerate}
+			\item Predpokladajme že gramatika $G$ je viacznačná. $G = (Q_{G}, \Sigma_{G}, P, q_{G}^{0})$
+			\item \label{def} Podľa definície 4.5 je gramatika $G$ viacznačná ak generuje aspoň jednu viacznačnú vetu $w$. Veta $w$ je generovaná gramatikou $G$ ku ktorej existujú aspoň 2 rôzne derivačné stromy s koncovými uzlami tvoriacu vetu $w$.
+			\item \label{gn} Z dôkazu pre vetu 3.7 vieme že KA M sa dá previesť na DKA N. $N = (Q_{N}, \Sigma_{N}, \delta_{N}, q_{N}^0, F_{N})$
+			\item Z \ref{def} teda platí $\forall r \in \Sigma_{G} \exists q \in Q_{G} \exists a \in \Sigma_{G} : |q \rightarrow ar| > 1$, potom platí $\exists q \in Q_{N} \exists a \in \Sigma_{N}: |\delta(q,a)| > 1$, čiže k odvodzovaciemu pravidlu gramatiky existuje ekvivalentný prechod v konečnom automate.
+			\item Kedže na základe \ref{gn} musí pre KA existovať viac ako jeden prechod pre určitý stav a symbol, tak dochádzame k sporu. Kedže na základe definície DKA, môže existovať maximálne jeden takýto prechod. $\forall q \in Q_{N} \forall a \in \Sigma_{N}: |\delta(q,a)| \leq 1$
+			\item Gramatika tedy neni viacznačná. Definícia 4.5 hovorí že ak gramatika neni viacznačná tak je potom jednoznačná.
+		\end{enumerate}
+	\item Gramatika G je jednoznačná. Takže pre každý regulárny jazyk existuje jednoznačná gramatika.
+\end{enumerate}
+
+\end{mysolution}
+
+\end{document}
+
+\grid
